@@ -74,7 +74,9 @@
         radial-gradient(at 80% 0%, rgba(166, 138, 100, 0.15) 0, transparent 50%),
         radial-gradient(at 100% 100%, rgba(101, 109, 74, 0.12) 0, transparent 40%);
       font-family: 'Plus Jakarta Sans', sans-serif;
-      overflow-x: hidden;
+      overflow: hidden;
+      height: 100vh;
+      height: 100dvh;
     }
 
     /* Slick Custom Scrollbar styling */
@@ -90,8 +92,7 @@
     .nav-item.active {
       background: linear-gradient(135deg, var(--coffee-bean), var(--camel));
       color: #ffffff !important;
-      box-shadow: 0 4px 12px rgba(127, 85, 57, 0.25);
-      transform: translateY(-5px);
+      box-shadow: 0 3px 8px rgba(127, 85, 57, 0.18);
     }
 
     /* Beautiful focus & transition effects */
@@ -152,7 +153,7 @@
 
   <div class="min-h-screen bg-[#ede0d4] flex items-center justify-center py-0 sm:py-6 selection:bg-camel/30">
     <!-- Centered phone viewport frame on desktop screens -->
-    <div id="phone-container" class="w-full sm:max-w-[430px] sm:min-h-[850px] sm:max-h-[920px] sm:rounded-[40px] sm:ring-[12px] sm:ring-ebony sm:shadow-[0_25px_65px_-12px_rgba(65,72,51,0.25)] bg-[#fcf9f5] relative flex flex-col overflow-hidden sm:aspect-[9/19.5]">
+    <div id="phone-container" class="w-full h-screen h-[100dvh] sm:h-[850px] sm:max-w-[430px] sm:rounded-[40px] sm:ring-[12px] sm:ring-ebony sm:shadow-[0_25px_65px_-12px_rgba(65,72,51,0.25)] bg-[#fcf9f5] relative flex flex-col overflow-hidden">
       
       <!-- Immutable First-Time Launch Screen Overlay -->
       <div id="app-splash" class="absolute inset-0 z-[100] bg-gradient-to-b from-[#fdfcf9] via-[#f7ebd9] to-[#ede0d4] flex flex-col items-center justify-between py-16 px-8 transition-all duration-700 ease-out">
@@ -187,20 +188,20 @@
       <div class="absolute inset-0 z-0 opacity-40 bg-gradient-to-br from-[#ede0d4] via-white to-[#a68a64] pointer-events-none"></div>
 
       <!-- Premium Sticky Top Header -->
-      <header id="app-header" class="pt-10 px-6 pb-4 flex justify-between items-center glass-pill sticky top-0 z-40 border-b border-white/20">
+      <header id="app-header" class="pt-5 px-6 pb-3 flex justify-between items-center bg-white/75 backdrop-blur-md sticky top-0 z-40 border-b border-black/5 shadow-sm transition-all duration-300">
         <div>
-          <p class="text-[9px] font-mono tracking-widest text-olive-dusty/80 font-semibold uppercase">Apex Dashboard</p>
-          <h1 id="greeting-title" class="text-base font-extrabold tracking-tight text-ebony">Good Morning, Chief</h1>
+          <p class="text-[8px] font-mono tracking-[0.2em] text-olive-dusty/80 font-bold uppercase">Apex Dashboard</p>
+          <h1 id="greeting-title" class="text-sm font-semibold tracking-tight text-ebony-dark">Good Morning, Chief</h1>
         </div>
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-2.5">
           <!-- Live Date Display -->
           <div class="text-right hidden xs:block">
-            <p id="live-date" class="text-[10px] font-mono text-olive-dusty/80 font-bold">Wed, Jun 17 2026</p>
+            <p id="live-date" class="text-[9px] font-mono text-olive-dusty/70 font-semibold tracking-wider">Wed, Jun 17 2026</p>
           </div>
           <!-- Notifications Bell -->
-          <button id="notification-btn" class="relative w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-white/50 shadow-sm active:scale-95 transition-all text-ebony-dark">
-            <i class="fa-regular fa-bell text-sm"></i>
-            <span class="absolute top-1 right-1 w-2 h-2 bg-[#d93838] rounded-full ring-2 ring-white"></span>
+          <button id="notification-btn" class="relative w-8 h-8 flex items-center justify-center rounded-full bg-white/80 border border-white/60 shadow-sm active:scale-95 transition-all text-ebony">
+            <i class="fa-regular fa-bell text-[11px]"></i>
+            <span class="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full ring-1 ring-white"></span>
           </button>
         </div>
       </header>
@@ -245,7 +246,7 @@
               </div>
               <div class="mt-4">
                 <p class="text-[10px] text-olive-dusty/70 font-semibold uppercase">Spent 7 Days</p>
-                <p id="home-spend-week" class="text-base font-extrabold text-ebony">Rs. 0</p>
+                <p id="home-spend-week" class="text-[15px] font-semibold text-ebony">Rs. 0</p>
               </div>
             </div>
             
@@ -258,7 +259,7 @@
               </div>
               <div class="mt-4">
                 <p class="text-[10px] text-olive-dusty/70 font-semibold uppercase">Pending Tasks</p>
-                <p id="home-tasks-pending" class="text-base font-extrabold text-ebony">0 Active</p>
+                <p id="home-tasks-pending" class="text-[15px] font-semibold text-ebony">0 Active</p>
               </div>
             </div>
           </div>
@@ -270,9 +271,9 @@
                 <span class="w-7 h-7 rounded-lg bg-coffee-bean/10 text-coffee-bean flex items-center justify-center text-xs">
                   <i class="fa-solid fa-seedling"></i>
                 </span>
-                <h3 class="text-xs font-extrabold text-ebony-dark">Today's Habits Streak</h3>
+                <h3 class="text-xs font-semibold text-ebony-dark">Today's Habits Streak</h3>
               </div>
-              <p id="home-habit-pct" class="text-[10px] font-mono font-extrabold text-coffee-bean bg-coffee-bean/10 px-2 py-0.5 rounded-full">0%</p>
+              <p id="home-habit-pct" class="text-[10px] font-mono font-bold text-coffee-bean bg-coffee-bean/10 px-2 py-0.5 rounded-full">0%</p>
             </div>
             <div class="w-full bg-olive-dusty/10 h-2 rounded-full overflow-hidden">
               <div id="home-habit-progress-bar" class="bg-gradient-to-r from-coffee-bean to-camel h-full rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -280,7 +281,7 @@
           </div>
 
           <!-- Quick Actions Panel -->
-          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Premium Shortcuts</h3>
+          <h3 class="text-xs font-semibold text-olive-dusty uppercase tracking-wider mb-3">Premium Shortcuts</h3>
           <div class="grid grid-cols-4 gap-2 mb-6 text-center">
             <button onclick="openFormSheet('expense')" class="glass-card rounded-2xl py-3 text-ebony active:scale-95 transition-all flex flex-col items-center">
               <i class="fa-solid fa-receipt text-coffee-bean text-sm"></i>
@@ -302,7 +303,7 @@
 
           <!-- Combined Rich Dynamic Activity Feed -->
           <div class="flex justify-between items-center mb-3">
-            <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider">Dynamic Timeline</h3>
+            <h3 class="text-xs font-semibold text-olive-dusty uppercase tracking-wider">Dynamic Timeline</h3>
             <div class="flex items-center space-x-2">
               <button id="clear-data-btn" class="text-[9px] font-mono text-[#d93838] bg-red-500/5 px-2.5 py-1 rounded-lg hover:bg-red-500/10 hover:text-red-700 transition-all font-bold">Wipe Database</button>
               <button id="reset-data-btn" class="text-[9px] font-mono text-coffee-bean bg-coffee-bean/5 px-2.5 py-1 rounded-lg hover:bg-coffee-bean/10 transition-all font-bold">Reset Demo</button>
@@ -347,19 +348,19 @@
 
           <!-- Expenditure Budget Category Analytics -->
           <div class="glass-card rounded-3xl p-5 mb-5">
-            <h3 class="text-xs font-extrabold text-ebony-dark mb-4 flex items-center"><i class="fa-solid fa-chart-pie text-coffee-bean mr-1.5"></i> Category Budget Limits</h3>
+            <h3 class="text-xs font-semibold text-ebony-dark mb-4 flex items-center"><i class="fa-solid fa-chart-pie text-coffee-bean mr-1.5"></i> Category Budget Limits</h3>
             <div id="expense-budget-bars" class="space-y-3.5">
               <!-- Budget percentage item templates populated dynamically -->
             </div>
           </div>
-
+ 
           <!-- Transaction Ledger -->
-          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Transaction Log</h3>
+          <h3 class="text-xs font-semibold text-olive-dusty uppercase tracking-wider mb-3">Transaction Log</h3>
           <div id="expense-transactions-list" class="space-y-2.5">
             <!-- Dynamic transactions go here -->
           </div>
         </div>
-
+ 
         <!-- View 3: Money Lending Tracker -->
         <div id="view-lending" class="view-panel hidden transition-all duration-300">
           <!-- Balance Summary Cards -->
@@ -384,7 +385,7 @@
               </div>
             </div>
           </div>
-
+ 
           <!-- Filter Lending chips -->
           <div class="flex space-x-1.5 mb-4">
             <button data-filter="all" class="lending-filter-chip flex-1 py-1 rounded-full text-[10px] font-bold transition-all bg-gradient-to-r from-coffee-bean to-camel text-white active">All Log</button>
@@ -392,9 +393,9 @@
             <button data-filter="borrowed" class="lending-filter-chip flex-1 py-1 rounded-full text-[10px] font-bold transition-all bg-white text-olive-dusty border border-white/50">Borrowed</button>
             <button data-filter="overdue" class="lending-filter-chip flex-1 py-1 rounded-full text-[10px] font-bold transition-all bg-white text-olive-dusty border border-white/50">Overdue</button>
           </div>
-
+ 
           <!-- Debts List -->
-          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Outstanding Settled Ledger</h3>
+          <h3 class="text-xs font-semibold text-olive-dusty uppercase tracking-wider mb-3">Outstanding Settled Ledger</h3>
           <div id="lending-tracker-list" class="space-y-3">
             <!-- Settled or unresolved debts loaded here -->
           </div>
@@ -463,7 +464,7 @@
 
           <!-- Week-Level Completion History Grid -->
           <div class="glass-card rounded-3xl p-4 mb-5">
-            <h3 class="text-xs font-extrabold text-ebony-dark mb-3 flex items-center"><i class="fa-solid fa-calendar-days text-coffee-bean mr-1.5"></i> Daily Compliance</h3>
+            <h3 class="text-xs font-semibold text-ebony-dark mb-3 flex items-center"><i class="fa-solid fa-calendar-days text-coffee-bean mr-1.5"></i> Daily Compliance</h3>
             <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-mono">
               <div>
                 <span class="text-olive-dusty/60 font-bold block mb-1">Th</span>
@@ -490,14 +491,14 @@
                 <span data-day="2026-06-16" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">16</span>
               </div>
               <div>
-                <span class="text-ebony block font-extrabold mb-1">We</span>
-                <span data-day="2026-06-17" class="day-dot w-7 h-7 mx-auto rounded-full bg-coffee-bean ring-2 ring-coffee-bean/30 text-white flex items-center justify-center font-extrabold shadow-sm">17</span>
+                <span class="text-ebony block font-semibold mb-1">We</span>
+                <span data-day="2026-06-17" class="day-dot w-7 h-7 mx-auto rounded-full bg-coffee-bean ring-2 ring-coffee-bean/30 text-white flex items-center justify-center font-semibold shadow-sm">17</span>
               </div>
             </div>
           </div>
-
+ 
           <!-- Habit cards display -->
-          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Daily Seedlings</h3>
+          <h3 class="text-xs font-semibold text-olive-dusty uppercase tracking-wider mb-3">Daily Seedlings</h3>
           <div id="habits-holder-stack" class="space-y-4">
             <!-- List of individual habits containing streaks + week mini calendar toggles -->
           </div>
@@ -506,7 +507,7 @@
       </main>
 
       <!-- Glassmorphic Floating Nav Stick Pill -->
-      <nav id="bottom-sticky-nav" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[398px] bg-white/80 backdrop-blur-xl border border-white/40 shadow-premium rounded-[28px] px-3 py-2 z-40 flex justify-between items-center">
+      <nav id="bottom-sticky-nav" class="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[398px] bg-white/80 backdrop-blur-xl border border-white/40 shadow-premium rounded-[28px] px-3 py-2 z-40 flex justify-between items-center">
         <a href="#" data-view="home" class="nav-item flex flex-col items-center justify-center w-11 h-11 rounded-2xl text-olive-dusty/80 font-bold active:scale-90 transition-all duration-300">
           <i class="fa-solid fa-house text-sm"></i>
           <span class="text-[8px] font-sans font-bold mt-0.5">Home</span>
@@ -1178,12 +1179,12 @@
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl ${colorCls} flex items-center justify-center text-sm"><i class="fa-solid ${iconClass}"></i></div>
                 <div>
-                  <h4 class="text-xs font-bold text-ebony-dark">${trans.description || trans.category}</h4>
+                  <h4 class="text-xs font-semibold text-ebony-dark">${trans.description || trans.category}</h4>
                   <p class="text-[9px] font-mono text-olive-dusty/60 mt-0.5">${trans.category} • ${trans.date}</p>
                 </div>
               </div>
               <div class="flex items-center space-x-3">
-                <span class="text-xs font-mono font-extrabold ${isIncome ? 'text-emerald-600' : 'text-ebony'}">${isIncome ? '+' : '-'}${UTILS.formatCurrency(trans.amount)}</span>
+                <span class="text-xs font-mono font-semibold ${isIncome ? 'text-emerald-600' : 'text-ebony'}">${isIncome ? '+' : '-'}${UTILS.formatCurrency(trans.amount)}</span>
                 <button onclick="deleteExpenseItem(${trans.id})" class="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/5 text-[#d93838] border border-red-500/10 hover:bg-red-500/10 transition-all active:scale-90"><i class="fa-regular fa-trash-can text-xs"></i></button>
               </div>
             </div>`;
@@ -1191,7 +1192,7 @@
       }
       $('#expense-transactions-list').html(transHtml);
     }
-
+ 
     // 3. View: Lending Ledger Tracker
     function drawLending() {
       // Net stats calculation
@@ -1200,7 +1201,7 @@
       
       $('#lend-total-lent').text(UTILS.formatCurrency(totalLent));
       $('#lend-total-borrowed').text(UTILS.formatCurrency(totalBorrowed));
-
+ 
       // Filter Logic
       let listData = [...state.lending];
       if (state.lendingFilter === 'lent') {
@@ -1212,7 +1213,7 @@
         const today = new Date('2026-06-17T00:00:00');
         listData = state.lending.filter(l => l.status !== 'Paid' && new Date(l.dueDate + 'T00:00:00') < today);
       }
-
+ 
       let debtHtml = '';
       if (listData.length === 0) {
         debtHtml = `
@@ -1230,26 +1231,26 @@
           if (item.status !== 'Paid' && dDate < tDate) {
             displayStatus = 'Overdue';
           }
-
+ 
           let statusBadgeCls = 'bg-amber-500/10 text-amber-600 border border-amber-500/20';
           if (resolved) statusBadgeCls = 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
           if (displayStatus === 'Overdue') statusBadgeCls = 'bg-red-500/10 text-[#d93838] border-red-500/20';
-
+ 
           let arrowIcon = item.type === 'lent' ? 'fa-arrow-up-right-from-square text-emerald-600 bg-emerald-500/10' : 'fa-arrow-down-left-from-square text-[#d93838] bg-red-500/10';
           let actionBtn = resolved ? '' : `<button onclick="settleLendingDebt(${item.id})" class="ml-2 w-7 h-7 flex items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 active:scale-90 hover:bg-emerald-500/20 transition-all" title="Mark Settled"><i class="fa-solid fa-check text-xs"></i></button>`;
-
+ 
           debtHtml += `
             <div class="glass-card rounded-[22px] p-3.5 border border-white/40 shadow-sm flex flex-col justify-between mb-2">
               <div class="flex justify-between items-start">
                 <div class="flex items-center space-x-2.5">
                   <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs ${arrowIcon}"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                   <div>
-                    <h4 class="text-xs font-extrabold text-ebony-dark">${item.person}</h4>
+                    <h4 class="text-xs font-semibold text-ebony-dark">${item.person}</h4>
                     <span class="text-[9px] font-mono font-bold tracking-wider uppercase text-olive-dusty/60">${item.type === 'lent' ? 'You Lent' : 'You Borrowed'}</span>
                   </div>
                 </div>
                 <div class="text-right">
-                  <span class="text-xs font-mono font-extrabold text-ebony block">${UTILS.formatCurrency(item.amount)}</span>
+                  <span class="text-xs font-mono font-semibold text-ebony block">${UTILS.formatCurrency(item.amount)}</span>
                   <span class="text-[9px] font-mono text-olive-dusty block mt-0.5">${UTILS.formatDateLabel(item.dueDate)}</span>
                 </div>
               </div>
