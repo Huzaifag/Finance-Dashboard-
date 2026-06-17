@@ -1,0 +1,1999 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Finance & Habits Dashboard</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts - Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            coffee: {
+              bean: '#7f5539',
+              dark: '#5a3d28',
+              light: '#9c6644',
+            },
+            camel: {
+              DEFAULT: '#a68a64',
+              light: '#caaf8a',
+            },
+            almond: {
+              cream: '#ede0d4',
+              light: '#f5ebe0',
+              dark: '#ddb892',
+            },
+            olive: {
+              dusty: '#656d4a',
+              dark: '#414833',
+            },
+            ebony: {
+              DEFAULT: '#414833',
+              dark: '#2e3324',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            'premium': '0 8px 30px 0 rgba(127, 85, 57, 0.08)',
+            'glass': '0 8px 32px 0 rgba(65, 72, 51, 0.06)',
+            'button': '0 4px 14px 0 rgba(111, 78, 55, 0.2)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --coffee-bean: #7f5539;
+      --camel: #a68a64;
+      --almond-cream: #ede0d4;
+      --dusty-olive: #656d4a;
+      --ebony: #414833;
+    }
+
+    body {
+      background-color: var(--almond-cream);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(237, 224, 212, 1) 0, transparent 40%),
+        radial-gradient(at 80% 0%, rgba(166, 138, 100, 0.15) 0, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(101, 109, 74, 0.12) 0, transparent 40%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Slick Custom Scrollbar styling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Active bottom-nav pill */
+    .nav-item.active {
+      background: linear-gradient(135deg, var(--coffee-bean), var(--camel));
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(127, 85, 57, 0.25);
+      transform: translateY(-5px);
+    }
+
+    /* Beautiful focus & transition effects */
+    .trans-slow {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(127, 85, 57, 0.1);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(127, 85, 57, 0.1);
+    }
+
+    .btn-gradient {
+      background: linear-gradient(135deg, var(--coffee-bean), var(--camel));
+    }
+
+    .glass-pill {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes skeleton-shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    .shimmer-bg {
+      background: linear-gradient(
+        90deg,
+        rgba(127, 85, 57, 0.05) 25%,
+        rgba(127, 85, 57, 0.15) 50%,
+        rgba(127, 85, 57, 0.05) 75%
+      );
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s infinite linear;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-ebony select-none antialiased">
+
+  <div class="min-h-screen bg-[#ede0d4] flex items-center justify-center py-0 sm:py-6 selection:bg-camel/30">
+    <!-- Centered phone viewport frame on desktop screens -->
+    <div id="phone-container" class="w-full sm:max-w-[430px] sm:min-h-[850px] sm:max-h-[920px] sm:rounded-[40px] sm:ring-[12px] sm:ring-ebony sm:shadow-[0_25px_65px_-12px_rgba(65,72,51,0.25)] bg-[#fcf9f5] relative flex flex-col overflow-hidden sm:aspect-[9/19.5]">
+      
+      <!-- Immutable First-Time Launch Screen Overlay -->
+      <div id="app-splash" class="absolute inset-0 z-[100] bg-gradient-to-b from-[#fdfcf9] via-[#f7ebd9] to-[#ede0d4] flex flex-col items-center justify-between py-16 px-8 transition-all duration-700 ease-out">
+        <div class="text-center pt-4">
+          <p class="text-[9px] font-mono tracking-[0.25em] text-coffee-bean/50 font-extrabold uppercase">SYSTEMS INITIALIZING</p>
+        </div>
+
+        <div class="flex flex-col items-center text-center space-y-4">
+          <div class="relative flex items-center justify-center">
+            <!-- Rotating ornamental ring -->
+            <div class="w-20 h-20 rounded-full border border-dashed border-coffee-bean/30 animate-spin" style="animation-duration: 9s;"></div>
+            <!-- Center branding unit -->
+            <div class="absolute w-14 h-14 rounded-2xl bg-gradient-to-br from-coffee-bean to-camel text-white flex items-center justify-center shadow-lg shadow-coffee-bean/20 transform rotate-6">
+              <i class="fa-solid fa-coins text-xl"></i>
+            </div>
+          </div>
+          <div class="pt-2">
+            <h2 class="text-xl font-extrabold text-[#414833] tracking-tight">Apex Dashboard</h2>
+            <p class="text-[11px] font-medium text-olive-dusty/80 mt-1">Sleek Financial & Habits Engine</p>
+          </div>
+        </div>
+
+        <div class="w-full max-w-[200px] flex flex-col items-center space-y-3 pb-4">
+          <div class="w-full h-1 bg-coffee-bean/10 rounded-full overflow-hidden">
+            <div id="splash-progress" class="bg-gradient-to-r from-coffee-bean to-camel h-full rounded-full transition-all duration-[1300ms] ease-out" style="width: 0%"></div>
+          </div>
+          <p class="text-[8px] font-mono font-bold tracking-wider text-coffee-bean/60 uppercase">Syncing Local Ledger...</p>
+        </div>
+      </div>
+
+      <!-- Gradient background decor matching "Sleek Interface" -->
+      <div class="absolute inset-0 z-0 opacity-40 bg-gradient-to-br from-[#ede0d4] via-white to-[#a68a64] pointer-events-none"></div>
+
+      <!-- Premium Sticky Top Header -->
+      <header id="app-header" class="pt-10 px-6 pb-4 flex justify-between items-center glass-pill sticky top-0 z-40 border-b border-white/20">
+        <div>
+          <p class="text-[9px] font-mono tracking-widest text-olive-dusty/80 font-semibold uppercase">Apex Dashboard</p>
+          <h1 id="greeting-title" class="text-base font-extrabold tracking-tight text-ebony">Good Morning, Chief</h1>
+        </div>
+        <div class="flex items-center space-x-2">
+          <!-- Live Date Display -->
+          <div class="text-right hidden xs:block">
+            <p id="live-date" class="text-[10px] font-mono text-olive-dusty/80 font-bold">Wed, Jun 17 2026</p>
+          </div>
+          <!-- Notifications Bell -->
+          <button id="notification-btn" class="relative w-9 h-9 flex items-center justify-center rounded-xl bg-white border border-white/50 shadow-sm active:scale-95 transition-all text-ebony-dark">
+            <i class="fa-regular fa-bell text-sm"></i>
+            <span class="absolute top-1 right-1 w-2 h-2 bg-[#d93838] rounded-full ring-2 ring-white"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Main App Viewport -->
+      <main id="app-viewport" class="flex-1 overflow-y-auto px-5 pt-3 pb-32 no-scrollbar">
+        
+        <!-- Viewport Skeleton Container -->
+        <div id="viewport-skeleton" class="hidden transition-all duration-300"></div>
+
+        <!-- View 1: Home/Dashboard -->
+        <div id="view-home" class="view-panel transition-all duration-300">
+          
+          <!-- Balance Summary Bento Card -->
+          <div class="bg-gradient-to-br from-ebony to-olive-dusty rounded-3xl p-5 text-white shadow-premium mb-5 relative overflow-hidden">
+            <div class="absolute right-0 bottom-0 translate-x-4 translate-y-4 opacity-10">
+              <i class="fa-solid fa-coins text-8xl"></i>
+            </div>
+            <p class="text-[10px] font-mono tracking-widest uppercase text-almond-cream/60">Estimated Total Balance</p>
+            <h2 id="home-net-worth" class="text-3xl font-light tracking-tight my-1 py-1 font-sans">Rs. 0</h2>
+            
+            <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-white/10 text-xs font-mono">
+              <div>
+                <p class="text-almond-cream/60 text-[9px] uppercase">Lent (To Collect)</p>
+                <p id="home-lent-indicator" class="text-emerald-300 font-bold text-sm mt-0.5">+Rs. 0</p>
+              </div>
+              <div>
+                <p class="text-almond-cream/60 text-[9px] uppercase">Borrowed (Due)</p>
+                <p id="home-borrowed-indicator" class="text-orange-300 font-bold text-sm mt-0.5">-Rs. 0</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modules Summary Grid -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="glass-card rounded-[22px] p-3.5 flex flex-col justify-between">
+              <div class="flex justify-between items-start">
+                <span class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-wallet"></i>
+                </span>
+                <span class="text-[9px] font-mono font-bold text-olive-dusty/60">WALLET</span>
+              </div>
+              <div class="mt-4">
+                <p class="text-[10px] text-olive-dusty/70 font-semibold uppercase">Spent 7 Days</p>
+                <p id="home-spend-week" class="text-base font-extrabold text-ebony">Rs. 0</p>
+              </div>
+            </div>
+            
+            <div class="glass-card rounded-[22px] p-3.5 flex flex-col justify-between">
+              <div class="flex justify-between items-start">
+                <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-list-check"></i>
+                </span>
+                <span class="text-[9px] font-mono font-bold text-olive-dusty/60">TASKS</span>
+              </div>
+              <div class="mt-4">
+                <p class="text-[10px] text-olive-dusty/70 font-semibold uppercase">Pending Tasks</p>
+                <p id="home-tasks-pending" class="text-base font-extrabold text-ebony">0 Active</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Habits Today Completion Bar -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/50">
+            <div class="flex justify-between items-center mb-3">
+              <div class="flex items-center space-x-2">
+                <span class="w-7 h-7 rounded-lg bg-coffee-bean/10 text-coffee-bean flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-seedling"></i>
+                </span>
+                <h3 class="text-xs font-extrabold text-ebony-dark">Today's Habits Streak</h3>
+              </div>
+              <p id="home-habit-pct" class="text-[10px] font-mono font-extrabold text-coffee-bean bg-coffee-bean/10 px-2 py-0.5 rounded-full">0%</p>
+            </div>
+            <div class="w-full bg-olive-dusty/10 h-2 rounded-full overflow-hidden">
+              <div id="home-habit-progress-bar" class="bg-gradient-to-r from-coffee-bean to-camel h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Quick Actions Panel -->
+          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Premium Shortcuts</h3>
+          <div class="grid grid-cols-4 gap-2 mb-6 text-center">
+            <button onclick="openFormSheet('expense')" class="glass-card rounded-2xl py-3 text-ebony active:scale-95 transition-all flex flex-col items-center">
+              <i class="fa-solid fa-receipt text-coffee-bean text-sm"></i>
+              <span class="text-[9px] font-bold mt-1.5">+ Spend</span>
+            </button>
+            <button onclick="openFormSheet('lending')" class="glass-card rounded-2xl py-3 text-ebony active:scale-95 transition-all flex flex-col items-center">
+              <i class="fa-solid fa-hand-holding-dollar text-camel text-sm"></i>
+              <span class="text-[9px] font-bold mt-1.5">+ Loan</span>
+            </button>
+            <button onclick="openFormSheet('task')" class="glass-card rounded-2xl py-3 text-ebony active:scale-95 transition-all flex flex-col items-center">
+              <i class="fa-solid fa-circle-check text-olive-dusty text-sm"></i>
+              <span class="text-[9px] font-bold mt-1.5">+ Task</span>
+            </button>
+            <button onclick="openFormSheet('habit')" class="glass-card rounded-2xl py-3 text-ebony active:scale-95 transition-all flex flex-col items-center">
+              <i class="fa-solid fa-seedling text-emerald-600 text-sm"></i>
+              <span class="text-[9px] font-bold mt-1.5">+ Habit</span>
+            </button>
+          </div>
+
+          <!-- Combined Rich Dynamic Activity Feed -->
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider">Dynamic Timeline</h3>
+            <div class="flex items-center space-x-2">
+              <button id="clear-data-btn" class="text-[9px] font-mono text-[#d93838] bg-red-500/5 px-2.5 py-1 rounded-lg hover:bg-red-500/10 hover:text-red-700 transition-all font-bold">Wipe Database</button>
+              <button id="reset-data-btn" class="text-[9px] font-mono text-coffee-bean bg-coffee-bean/5 px-2.5 py-1 rounded-lg hover:bg-coffee-bean/10 transition-all font-bold">Reset Demo</button>
+            </div>
+          </div>
+          <div id="activity-feed-container" class="space-y-3">
+            <!-- Timeline elements populated by JS -->
+          </div>
+        </div>
+
+        <!-- View 2: Expense Manager -->
+        <div id="view-expenses" class="view-panel hidden transition-all duration-300">
+          <!-- Total Balance Cards -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/60">
+            <p class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold">Available Liquid Cash</p>
+            <h2 id="exp-total-balance" class="text-3xl font-light text-ebony mt-0.5">Rs. 0</h2>
+            
+            <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-olive-dusty/10 text-xs">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xs"><i class="fa-solid fa-arrow-down"></i></div>
+                <div>
+                  <p class="text-[9px] font-mono text-olive-dusty/60 uppercase">Income</p>
+                  <p id="exp-total-income" class="font-bold text-emerald-600">Rs. 0</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-red-500/10 text-red-600 flex items-center justify-center text-xs"><i class="fa-solid fa-arrow-up"></i></div>
+                <div>
+                  <p class="text-[9px] font-mono text-olive-dusty/60 uppercase">Expenses</p>
+                  <p id="exp-total-expense" class="font-bold text-[#d93838]">Rs. 0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Time Frame Filter Chips -->
+          <div class="flex space-x-2 mb-4">
+            <button data-filter="daily" class="exp-filter-chip flex-1 py-1.5 rounded-full text-[10px] font-bold py-1.5 transition-all duration-300 border bg-white border-white/50 text-olive-dusty font-sans">Today</button>
+            <button data-filter="weekly" class="exp-filter-chip flex-1 py-1.5 rounded-full text-[10px] font-bold py-1.5 transition-all duration-300 border bg-gradient-to-r from-coffee-bean to-camel text-white active">This Week</button>
+            <button data-filter="monthly" class="exp-filter-chip flex-1 py-1.5 rounded-full text-[10px] font-bold py-1.5 transition-all duration-300 border bg-white border-white/50 text-olive-dusty">This Month</button>
+          </div>
+
+          <!-- Expenditure Budget Category Analytics -->
+          <div class="glass-card rounded-3xl p-5 mb-5">
+            <h3 class="text-xs font-extrabold text-ebony-dark mb-4 flex items-center"><i class="fa-solid fa-chart-pie text-coffee-bean mr-1.5"></i> Category Budget Limits</h3>
+            <div id="expense-budget-bars" class="space-y-3.5">
+              <!-- Budget percentage item templates populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Transaction Ledger -->
+          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Transaction Log</h3>
+          <div id="expense-transactions-list" class="space-y-2.5">
+            <!-- Dynamic transactions go here -->
+          </div>
+        </div>
+
+        <!-- View 3: Money Lending Tracker -->
+        <div id="view-lending" class="view-panel hidden transition-all duration-300">
+          <!-- Balance Summary Cards -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-4 text-white shadow-sm flex flex-col justify-between">
+              <div>
+                <i class="fa-solid fa-hand-holding-dollar text-emerald-200 text-lg mb-2"></i>
+                <p class="text-[9px] font-mono text-emerald-200/80 uppercase">You Lent Others</p>
+              </div>
+              <div class="mt-4">
+                <p id="lend-total-lent" class="text-xl font-bold">Rs. 0</p>
+              </div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-orange-800 to-orange-600 rounded-2xl p-4 text-white shadow-sm flex flex-col justify-between">
+              <div>
+                <i class="fa-solid fa-landmark text-orange-200 text-lg mb-2"></i>
+                <p class="text-[9px] font-mono text-orange-200/80 uppercase font-bold">You Borrowed</p>
+              </div>
+              <div class="mt-4">
+                <p id="lend-total-borrowed" class="text-xl font-bold">Rs. 0</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Lending chips -->
+          <div class="flex space-x-1.5 mb-4">
+            <button data-filter="all" class="lending-filter-chip flex-1 py-1 rounded-full text-[10px] font-bold transition-all bg-gradient-to-r from-coffee-bean to-camel text-white active">All Log</button>
+            <button data-filter="lent" class="lending-filter-chip flex-1 py-1 rounded-full text-[10px] font-bold transition-all bg-white text-olive-dusty border border-white/50">Lent</button>
+            <button data-filter="borrowed" class="lending-filter-chip flex-1 py-1 rounded-full text-[10px] font-bold transition-all bg-white text-olive-dusty border border-white/50">Borrowed</button>
+            <button data-filter="overdue" class="lending-filter-chip flex-1 py-1 rounded-full text-[10px] font-bold transition-all bg-white text-olive-dusty border border-white/50">Overdue</button>
+          </div>
+
+          <!-- Debts List -->
+          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Outstanding Settled Ledger</h3>
+          <div id="lending-tracker-list" class="space-y-3">
+            <!-- Settled or unresolved debts loaded here -->
+          </div>
+        </div>
+
+        <!-- View 4: Task Manager -->
+        <div id="view-tasks" class="view-panel hidden transition-all duration-300">
+          
+          <!-- Productivity Summary Indicator Card -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/60">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold">Today's Focus Meter</p>
+                <h2 id="task-completion-text" class="text-2xl font-light text-ebony mt-0.5">Let's Clear 50%</h2>
+                <p class="text-[10px] text-olive-dusty/70 mt-1">Consistency compounds over time</p>
+              </div>
+              <!-- Bullet SVG Gauge -->
+              <div class="relative w-16 h-16 flex items-center justify-center shrink-0 ml-4">
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 64 64">
+                  <g transform="rotate(-90 32 32)">
+                    <circle cx="32" cy="32" r="28" stroke="currentColor" class="text-olive-dusty/10" stroke-width="5" fill="transparent" />
+                    <circle cx="32" cy="32" r="28" stroke="currentColor" id="task-radial-indicator" class="text-olive-dusty transition-all duration-500" stroke-width="5.5" stroke-dasharray="175" stroke-dashoffset="175" fill="transparent" stroke-linecap="round" />
+                  </g>
+                </svg>
+                <span id="task-pct-value" class="text-xs font-mono font-bold text-ebony leading-none">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Live Filter & Search Controls -->
+          <div class="glass-card rounded-2xl p-2 mb-4 flex items-center space-x-2">
+            <span class="pl-2.5 text-olive-dusty/60"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+            <input type="text" id="task-search-input" placeholder="Search tasks..." class="bg-transparent border-none text-xs w-full py-1 text-ebony outline-none placeholder-olive-dusty/40">
+          </div>
+
+          <!-- Filter Categories Row -->
+          <div class="flex space-x-1.5 overflow-x-auto pb-1.5 no-scrollbar mb-4">
+            <button data-filter="all" class="task-filter-chip shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold py-1.5 transition-all bg-gradient-to-r from-coffee-bean to-camel text-white active">All</button>
+            <button data-filter="pending" class="task-filter-chip shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold py-1.5 transition-all bg-white text-olive-dusty border border-white/50">Active</button>
+            <button data-filter="completed" class="task-filter-chip shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold py-1.5 transition-all bg-white text-olive-dusty border border-white/50">Cleared</button>
+            <button data-filter="high" class="task-filter-chip shrink-0 px-4 py-1.5 rounded-full text-[10px] font-bold py-1.5 transition-all bg-white text-olive-dusty border border-white/50">High Priority</button>
+          </div>
+
+          <!-- Task Card Layout Stack -->
+          <div id="tasks-holder-stack" class="space-y-3">
+            <!-- Checked and uncompleted tasks -->
+          </div>
+        </div>
+
+        <!-- View 5: Habits Tracker -->
+        <div id="view-habits" class="view-panel hidden transition-all duration-300">
+          
+          <!-- Habit Stats summary -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/60">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold">Habit Synergy Streak</p>
+                <h2 id="habit-total-points" class="text-2xl font-light text-coffee-bean mt-0.5">0 Streak Days</h2>
+                <p class="text-[10px] text-olive-dusty/70 mt-1">Seeds planted today bloom tomorrow</p>
+              </div>
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-coffee-bean to-camel text-white flex items-center justify-center shadow-sm">
+                <i class="fa-solid fa-seedling text-lg"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Week-Level Completion History Grid -->
+          <div class="glass-card rounded-3xl p-4 mb-5">
+            <h3 class="text-xs font-extrabold text-ebony-dark mb-3 flex items-center"><i class="fa-solid fa-calendar-days text-coffee-bean mr-1.5"></i> Daily Compliance</h3>
+            <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-mono">
+              <div>
+                <span class="text-olive-dusty/60 font-bold block mb-1">Th</span>
+                <span data-day="2026-06-11" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">11</span>
+              </div>
+              <div>
+                <span class="text-olive-dusty/60 font-bold block mb-1">Fr</span>
+                <span data-day="2026-06-12" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">12</span>
+              </div>
+              <div>
+                <span class="text-olive-dusty/60 font-bold block mb-1">Sa</span>
+                <span data-day="2026-06-13" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">13</span>
+              </div>
+              <div>
+                <span class="text-olive-dusty/60 font-bold block mb-1">Su</span>
+                <span data-day="2026-06-14" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">14</span>
+              </div>
+              <div>
+                <span class="text-olive-dusty/60 font-bold block mb-1">Mo</span>
+                <span data-day="2026-06-15" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">15</span>
+              </div>
+              <div>
+                <span class="text-olive-dusty/60 font-bold block mb-1">Tu</span>
+                <span data-day="2026-06-16" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">16</span>
+              </div>
+              <div>
+                <span class="text-ebony block font-extrabold mb-1">We</span>
+                <span data-day="2026-06-17" class="day-dot w-7 h-7 mx-auto rounded-full bg-coffee-bean ring-2 ring-coffee-bean/30 text-white flex items-center justify-center font-extrabold shadow-sm">17</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Habit cards display -->
+          <h3 class="text-xs font-extrabold text-olive-dusty uppercase tracking-wider mb-3">Daily Seedlings</h3>
+          <div id="habits-holder-stack" class="space-y-4">
+            <!-- List of individual habits containing streaks + week mini calendar toggles -->
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Glassmorphic Floating Nav Stick Pill -->
+      <nav id="bottom-sticky-nav" class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-32px)] max-w-[398px] bg-white/80 backdrop-blur-xl border border-white/40 shadow-premium rounded-[28px] px-3 py-2 z-40 flex justify-between items-center">
+        <a href="#" data-view="home" class="nav-item flex flex-col items-center justify-center w-11 h-11 rounded-2xl text-olive-dusty/80 font-bold active:scale-90 transition-all duration-300">
+          <i class="fa-solid fa-house text-sm"></i>
+          <span class="text-[8px] font-sans font-bold mt-0.5">Home</span>
+        </a>
+        <a href="#" data-view="expenses" class="nav-item flex flex-col items-center justify-center w-11 h-11 rounded-2xl text-olive-dusty/40 active:scale-95 transition-all duration-300">
+          <i class="fa-solid fa-wallet text-sm"></i>
+          <span class="text-[8px] font-sans mt-0.5">Wallet</span>
+        </a>
+        <a href="#" data-view="lending" class="nav-item flex flex-col items-center justify-center w-11 h-11 rounded-2xl text-olive-dusty/40 active:scale-95 transition-all duration-300">
+          <i class="fa-solid fa-hand-holding-dollar text-sm"></i>
+          <span class="text-[8px] font-sans mt-0.5">Lending</span>
+        </a>
+        <a href="#" data-view="tasks" class="nav-item flex flex-col items-center justify-center w-11 h-11 rounded-2xl text-olive-dusty/40 active:scale-95 transition-all duration-300">
+          <i class="fa-solid fa-list-check text-sm"></i>
+          <span class="text-[8px] font-sans mt-0.5">Tasks</span>
+        </a>
+        <a href="#" data-view="habits" class="nav-item flex flex-col items-center justify-center w-11 h-11 rounded-2xl text-olive-dusty/40 active:scale-95 transition-all duration-300">
+          <i class="fa-solid fa-seedling text-sm"></i>
+          <span class="text-[8px] font-sans mt-0.5">Habits</span>
+        </a>
+      </nav>
+
+      <!-- Floating Action Button at Bottom Viewport -->
+      <button onclick="triggerFabModalOption()" id="general-fab" class="absolute bottom-20 right-6 w-11 h-11 rounded-full bg-gradient-to-r from-coffee-bean to-camel text-white flex items-center justify-center shadow-button active:scale-95 transition-all duration-300 z-30">
+        <i class="fa-solid fa-plus text-sm"></i>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Smooth Slide-Up Native Bottom Sheet Component Backdrop -->
+  <div id="modal-container" class="fixed inset-0 bg-black/45 backdrop-blur-sm z-50 transition-opacity duration-300 flex justify-center items-end opacity-0 pointer-events-none">
+    <div id="bottom-sheet" class="w-full max-w-[430px] bg-gradient-to-b from-[#fdfcf9] to-[#f4ebe0] border-t border-white/50 rounded-t-[34px] p-5 shadow-2 targets-scroll-control transform translate-y-full transition-transform duration-300 max-h-[85vh] overflow-y-auto no-scrollbar">
+      
+      <!-- Action indicator line bar -->
+      <div class="w-10 h-1.5 bg-ebony/10 rounded-full mx-auto mb-4 cursor-pointer" onclick="closeFormSheet()"></div>
+      
+      <div id="modal-form-content">
+        <!-- Forms rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Sidebar Details Layer Panel -->
+  <div id="notification-sidebar" class="fixed inset-y-0 right-0 w-80 bg-[#fdfbf7] shadow-2xl z-50 transform translate-x-full transition-transform duration-300 p-5 flex flex-col border-l border-white/40">
+    <div class="flex justify-between items-center mb-5 pb-3 border-b border-olive-dusty/10">
+      <h3 class="text-xs font-bold uppercase tracking-wider text-ebony-dark">Apex Notifications</h3>
+      <button onclick="toggleNotificationSidebar()" class="w-8 h-8 rounded-lg hover:bg-olive-dusty/5 text-ebony text-sm transition-all"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto space-y-3 no-scrollbar" id="notification-sidebar-list">
+      <!-- Alerts feed -->
+    </div>
+    <div class="pt-3">
+      <button onclick="clearNotificationAlerts()" class="w-full py-2 rounded-xl text-[10px] font-mono tracking-widest uppercase bg-coffee-bean text-white font-bold transition-all hover:bg-coffee-dark active:scale-95 shadow-sm">Mark All Cleared</button>
+    </div>
+  </div>
+
+  <!-- Micro-system Toast Overlay Confirmation -->
+  <div id="toast-wrapper" class="fixed top-12 left-1/2 -translate-x-1/2 bg-ebony text-almond-cream text-[11px] px-4 py-2.5 rounded-xl shadow-xl z-[100] flex items-center space-x-2.5 opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-3 font-medium">
+    <i class="fa-solid fa-circle-check text-camel"></i>
+    <span id="toast-text-label">System synced</span>
+  </div>
+
+  <!-- Audio check effects mock -->
+  <audio id="click-chime" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA=="></audio>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- DB Logic, Mock Data, and App Interaction Code -->
+  <script>
+    // -------------------------------------------------------------
+    // Initial Datasets structured around Wed June 17, 2026
+    // -------------------------------------------------------------
+    const initialExpenses = [
+      { id: 1, type: 'income', amount: 250000.00, category: 'Salary', description: 'Apex Consulting Corp', date: '2026-06-15' },
+      { id: 2, type: 'expense', amount: 1450.00, category: 'Food', description: 'Spiced Latte & Tart', date: '2026-06-17' },
+      { id: 3, type: 'expense', amount: 4200.00, category: 'Transport', description: 'Taxi rides', date: '2026-06-16' },
+      { id: 4, type: 'expense', amount: 15000.00, category: 'Shopping', description: 'Designer Notebooks', date: '2026-06-14' },
+      { id: 5, type: 'expense', amount: 22000.00, category: 'Rent', description: 'Coworking space', date: '2026-06-13' }
+    ];
+
+    const initialLending = [
+      { id: 1, type: 'lent', person: 'Sarah Jenkins', amount: 35000.00, dueDate: '2026-06-25', status: 'Pending', payments: [] },
+      { id: 2, type: 'lent', person: 'Michael G.', amount: 9000.00, dueDate: '2026-06-10', status: 'Overdue', payments: [] },
+      { id: 3, type: 'borrowed', person: 'Mr. Mercer', amount: 20000.00, dueDate: '2026-06-30', status: 'Pending', payments: [] },
+      { id: 4, type: 'borrowed', person: 'Aunt Lily', amount: 40000.00, dueDate: '2026-06-05', status: 'Paid', payments: [{ amount: 40000.00, date: '2026-06-05' }] }
+    ];
+
+    const initialTasks = [
+      { id: 1, title: 'Refocus quarter wealth budget', priority: 'High', dueDate: '2026-06-18', completed: false },
+      { id: 2, title: 'Gym cardio & core stretch session', priority: 'Medium', dueDate: '2026-06-17', completed: true },
+      { id: 3, title: 'Review lease premium agreement', priority: 'Low', dueDate: '2026-06-21', completed: false },
+      { id: 4, title: 'Analyze stock asset performance', priority: 'High', dueDate: '2026-06-17', completed: false }
+    ];
+
+    const initialHabits = [
+      { id: 1, name: 'Drink 3L Purified Water', streak: 6, history: { '2026-06-16': true, '2026-06-15': true, '2026-06-14': true } },
+      { id: 2, name: 'Read 20 pages (Wealth)', streak: 11, history: { '2026-06-16': true, '2026-06-15': true, '2026-06-14': true } },
+      { id: 3, name: 'Meditate 15 mins', streak: 0, history: { '2026-06-16': false, '2026-06-15': true, '2026-06-14': false } },
+      { id: 4, name: 'Log all expenses & habits', streak: 3, history: { '2026-06-16': true, '2026-06-15': true, '2026-06-14': true } }
+    ];
+
+    const initialNotifications = [
+      { id: 1, text: 'Sarah Jenkins lent due in 8 days.', time: '10 mins ago', type: 'info' },
+      { id: 2, text: 'Gym cardio stretching task cleared.', time: '1 hour ago', type: 'success' },
+      { id: 3, text: 'Overdue warning on loan from Michael G (Rs. 9,000).', time: 'Yesterday', type: 'warning' }
+    ];
+
+    const categoryBudgets = {
+      'Food': 35000.00,
+      'Transport': 12000.00,
+      'Rent': 150000.00,
+      'Shopping': 40000.00,
+      'Entertainment': 25000.00,
+      'Others': 30000.00
+    };
+
+    // -------------------------------------------------------------
+    // LocalStorage State Controller
+    // -------------------------------------------------------------
+    const DB = {
+      init() {
+        if (!localStorage.getItem('apex_has_data')) {
+          localStorage.setItem('apex_expenses', JSON.stringify(initialExpenses));
+          localStorage.setItem('apex_lending', JSON.stringify(initialLending));
+          localStorage.setItem('apex_tasks', JSON.stringify(initialTasks));
+          localStorage.setItem('apex_habits', JSON.stringify(initialHabits));
+          localStorage.setItem('apex_notifications', JSON.stringify(initialNotifications));
+          localStorage.setItem('apex_has_data', 'true');
+        }
+      },
+      get(key) {
+        return JSON.parse(localStorage.getItem('apex_' + key)) || [];
+      },
+      set(key, data) {
+        localStorage.setItem('apex_' + key, JSON.stringify(data));
+      },
+      reset() {
+        localStorage.removeItem('apex_has_data');
+        this.init();
+      },
+      clearAll() {
+        localStorage.setItem('apex_expenses', JSON.stringify([]));
+        localStorage.setItem('apex_lending', JSON.stringify([]));
+        localStorage.setItem('apex_tasks', JSON.stringify([]));
+        localStorage.setItem('apex_habits', JSON.stringify([]));
+        localStorage.setItem('apex_notifications', JSON.stringify([]));
+        localStorage.setItem('apex_has_data', 'true');
+      }
+    };
+
+    // -------------------------------------------------------------
+    // Run Engine State Variables
+    // -------------------------------------------------------------
+    let state = {
+      expenses: [],
+      lending: [],
+      tasks: [],
+      habits: [],
+      notifications: [],
+      currentTab: 'home',
+      expenseFilter: 'weekly',
+      lendingFilter: 'all',
+      taskFilter: 'all',
+      searchQuery: ''
+    };
+
+    // -------------------------------------------------------------
+    // Utility Helpers
+    // -------------------------------------------------------------
+    const UTILS = {
+      formatCurrency(num) {
+        return 'Rs. ' + Number(num).toLocaleString('en-US', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        });
+      },
+      formatDateLabel(dateStr) {
+        // Humanized countdown labels relative to June 17, 2026
+        const target = new Date(dateStr + 'T00:00:00');
+        const today = new Date('2026-06-17T00:00:00');
+        const diffTime = target - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return 'Tomorrow';
+        if (diffDays === -1) return 'Yesterday';
+        if (diffDays < 0) return `${Math.abs(diffDays)} days overdue`;
+        return `In ${diffDays} days (${dateStr})`;
+      },
+      playChime() {
+        // Light tactile trigger click vibration
+        try {
+          const sound = document.getElementById('click-chime');
+          sound.play();
+        } catch(e) {}
+      }
+    };
+
+    // Toast Notice Trigger
+    function triggerToast(message, icon = 'fa-circle-check') {
+      $('#toast-text-label').text(message);
+      $('#toast-wrapper i').attr('class', `fa-solid ${icon} text-camel`);
+      $('#toast-wrapper').removeClass('opacity-0 pointer-events-none -translate-y-3').addClass('opacity-100 translate-y-0');
+      setTimeout(() => {
+        $('#toast-wrapper').removeClass('opacity-100 translate-y-0').addClass('opacity-0 pointer-events-none -translate-y-3');
+      }, 2600);
+    }
+
+    // -------------------------------------------------------------
+    // Core Navigation Engine containing dynamic shimmer skeletons
+    // -------------------------------------------------------------
+    function getSkeletonMarkup(viewId) {
+      if (viewId === 'home') {
+        return `
+          <!-- Balance Summary Card Shimmer -->
+          <div class="rounded-3xl p-5 mb-5 border border-white/50 glass-card">
+            <div class="h-3 w-1/3 shimmer-bg rounded mb-3"></div>
+            <div class="h-8 w-2/3 shimmer-bg rounded mb-4"></div>
+            <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-olive-dusty/10">
+              <div>
+                <div class="h-2 w-1/2 shimmer-bg rounded mb-2"></div>
+                <div class="h-4 w-2/3 shimmer-bg rounded"></div>
+              </div>
+              <div>
+                <div class="h-2 w-1/2 shimmer-bg rounded mb-2"></div>
+                <div class="h-4 w-2/3 shimmer-bg rounded"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Bento Grid Shimmer -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="glass-card rounded-[22px] p-4 h-24 flex flex-col justify-between">
+              <div class="w-8 h-8 rounded-xl shimmer-bg"></div>
+              <div class="h-4 w-3/4 shimmer-bg rounded mt-2"></div>
+            </div>
+            <div class="glass-card rounded-[22px] p-4 h-24 flex flex-col justify-between">
+              <div class="w-8 h-8 rounded-xl shimmer-bg"></div>
+              <div class="h-4 w-2/3 shimmer-bg rounded mt-2"></div>
+            </div>
+          </div>
+          <!-- Habit Shimmer -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/50">
+            <div class="flex justify-between items-center mb-3">
+              <div class="h-3 w-1/3 shimmer-bg rounded"></div>
+              <div class="h-3 w-8 shimmer-bg rounded"></div>
+            </div>
+            <div class="w-full h-2 shimmer-bg rounded-full"></div>
+          </div>
+          <!-- Feed Header -->
+          <div class="h-3.5 w-1/3 shimmer-bg rounded mb-3"></div>
+          <!-- Timeline Items Shimmer -->
+          <div class="space-y-3">
+            <div class="glass-card rounded-2xl p-3 flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-xl shimmer-bg shrink-0"></div>
+              <div class="flex-1 space-y-2">
+                <div class="h-3 w-3/4 shimmer-bg rounded"></div>
+                <div class="h-2 w-1/2 shimmer-bg rounded"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (viewId === 'expenses') {
+        return `
+          <!-- Available Cash Card Shimmer -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/50">
+            <div class="h-3 w-1/4 shimmer-bg rounded mb-3"></div>
+            <div class="h-8 w-1/2 shimmer-bg rounded mb-4"></div>
+            <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-olive-dusty/10">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg shimmer-bg shrink-0"></div>
+                <div class="flex-1 space-y-1">
+                  <div class="h-2 w-1/2 shimmer-bg rounded"></div>
+                  <div class="h-3 w-3/4 shimmer-bg rounded"></div>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg shimmer-bg shrink-0"></div>
+                <div class="flex-1 space-y-1">
+                  <div class="h-2 w-1/2 shimmer-bg rounded"></div>
+                  <div class="h-3 w-2/3 shimmer-bg rounded"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Filter Chips Shimmer -->
+          <div class="flex space-x-2 mb-4">
+            <div class="flex-1 h-9 rounded-full shimmer-bg"></div>
+            <div class="flex-1 h-9 rounded-full shimmer-bg"></div>
+            <div class="flex-1 h-9 rounded-full shimmer-bg"></div>
+          </div>
+          <!-- Category Budget Limits Shimmer -->
+          <div class="glass-card rounded-3xl p-5 mb-5 space-y-4">
+            <div class="h-3.5 w-1/3 shimmer-bg rounded mb-2"></div>
+            <div class="space-y-3">
+              <div class="space-y-1.5">
+                <div class="flex justify-between">
+                  <div class="h-2 w-1/4 shimmer-bg rounded"></div>
+                  <div class="h-2 w-8 shimmer-bg rounded"></div>
+                </div>
+                <div class="h-1.5 w-full shimmer-bg rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (viewId === 'lending') {
+        return `
+          <!-- Top cards Shimmer -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="glass-card rounded-[22px] p-4 h-24 flex flex-col justify-between">
+              <div class="w-8 h-8 rounded-xl shimmer-bg"></div>
+              <div class="h-4 w-2/3 shimmer-bg rounded mt-2"></div>
+            </div>
+            <div class="glass-card rounded-[22px] p-4 h-24 flex flex-col justify-between">
+              <div class="w-8 h-8 rounded-xl shimmer-bg"></div>
+              <div class="h-4 w-2/3 shimmer-bg rounded mt-2"></div>
+            </div>
+          </div>
+          <!-- Filters -->
+          <div class="flex space-x-2 mb-4">
+            <div class="flex-1 h-8 rounded-full shimmer-bg"></div>
+            <div class="flex-1 h-8 rounded-full shimmer-bg"></div>
+            <div class="flex-1 h-8 rounded-full shimmer-bg"></div>
+          </div>
+          <!-- Loans Item Streams -->
+          <div class="space-y-3">
+            <div class="glass-card rounded-2xl p-4 flex items-center justify-between">
+              <div class="flex items-center space-x-3 w-2/3">
+                <div class="w-10 h-10 rounded-xl shimmer-bg shrink-0"></div>
+                <div class="flex-1 space-y-2">
+                  <div class="h-3.5 w-3/4 shimmer-bg rounded"></div>
+                  <div class="h-2 w-1/2 shimmer-bg rounded"></div>
+                </div>
+              </div>
+              <div class="h-6 w-16 rounded-full shimmer-bg"></div>
+            </div>
+          </div>
+        `;
+      } else if (viewId === 'tasks') {
+        return `
+          <!-- Focus meter Shimmer -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/50">
+            <div class="flex justify-between items-center">
+              <div class="space-y-3 w-2/3">
+                <div class="h-2.5 w-1/3 shimmer-bg rounded"></div>
+                <div class="h-6 w-3/4 shimmer-bg rounded"></div>
+                <div class="h-2.5 w-1/2 shimmer-bg rounded"></div>
+              </div>
+              <div class="w-14 h-14 rounded-full shimmer-bg shrink-0"></div>
+            </div>
+          </div>
+          <!-- Search box -->
+          <div class="h-10 w-full rounded-2xl shimmer-bg mb-4 opacity-70"></div>
+          <!-- Filter chips -->
+          <div class="flex space-x-1.5 mb-4">
+            <div class="w-16 h-7 rounded-full shimmer-bg"></div>
+            <div class="w-16 h-7 rounded-full shimmer-bg"></div>
+            <div class="w-16 h-7 rounded-full shimmer-bg"></div>
+          </div>
+          <!-- Tasks list stack -->
+          <div class="space-y-3">
+            <div class="glass-card rounded-2xl p-4 h-16 shimmer-bg"></div>
+          </div>
+        `;
+      } else if (viewId === 'habits') {
+        return `
+          <!-- Habits stats card shimmer -->
+          <div class="glass-card rounded-3xl p-5 mb-5 border border-white/50">
+            <div class="flex justify-between items-center">
+              <div class="space-y-3 w-2/3">
+                <div class="h-2.5 w-1/4 shimmer-bg rounded"></div>
+                <div class="h-6 w-3/4 shimmer-bg rounded"></div>
+                <div class="h-2.5 w-1/2 shimmer-bg rounded"></div>
+              </div>
+              <div class="w-12 h-12 rounded-xl shimmer-bg shrink-0"></div>
+            </div>
+          </div>
+          <!-- Grid calendar weekly check -->
+          <div class="glass-card rounded-3xl p-4 mb-5">
+            <div class="h-3 w-1/3 shimmer-bg rounded mb-3"></div>
+            <div class="grid grid-cols-7 gap-2">
+              <div class="w-7 h-7 rounded-full shimmer-bg mx-auto"></div>
+              <div class="w-7 h-7 rounded-full shimmer-bg mx-auto"></div>
+              <div class="w-7 h-7 rounded-full shimmer-bg mx-auto"></div>
+              <div class="w-7 h-7 rounded-full shimmer-bg mx-auto"></div>
+              <div class="w-7 h-7 rounded-full shimmer-bg mx-auto"></div>
+              <div class="w-7 h-7 rounded-full shimmer-bg mx-auto"></div>
+              <div class="w-7 h-7 rounded-full shimmer-bg mx-auto"></div>
+            </div>
+          </div>
+        `;
+      }
+      return '';
+    }
+
+    function switchTab(viewId) {
+      if (!viewId) return;
+      
+      // Update persistent styling
+      $(`.nav-item`).removeClass('active text-white');
+      $(`.nav-item[data-view="${viewId}"]`).addClass('active');
+
+      const activePanel = $('.view-panel:not(.hidden)');
+      const targetPanel = $('#view-' + viewId);
+
+      // Scroll viewport back to topmost scroll offset for clean view transition
+      $('#app-viewport').scrollTop(0);
+
+      if (activePanel.attr('id') === targetPanel.attr('id')) return;
+
+      UTILS.playChime();
+
+      const skeletonContainer = $('#viewport-skeleton');
+
+      // Use animated skeleton transitions if switching tabs while a layout is active
+      if (activePanel.length > 0) {
+        // Render target skeleton instantly
+        skeletonContainer.html(getSkeletonMarkup(viewId)).removeClass('hidden opacity-0').addClass('opacity-100');
+        activePanel.addClass('opacity-0 scale-95');
+
+        setTimeout(() => {
+          activePanel.addClass('hidden');
+          
+          // Artificially keep luxury shimmer active for a premium reactive feedback duration
+          setTimeout(() => {
+            skeletonContainer.addClass('opacity-0');
+            
+            setTimeout(() => {
+              skeletonContainer.addClass('hidden');
+              targetPanel.removeClass('hidden opacity-0 scale-95').addClass('opacity-100 scale-100');
+              state.currentTab = viewId;
+              renderActiveView();
+            }, 100);
+
+          }, 400); 
+        }, 150);
+
+      } else {
+        // Clean direct placement on initial boot loading
+        targetPanel.removeClass('hidden opacity-0').addClass('opacity-100 scale-100');
+        state.currentTab = viewId;
+        renderActiveView();
+      }
+
+      // Hide or show FAB contextually based on Active sections
+      if (viewId === 'home') {
+        $('#general-fab').removeClass('hidden scale-0').addClass('scale-100');
+      } else {
+        $('#general-fab').removeClass('hidden scale-0').addClass('scale-100');
+      }
+    }
+
+    // -------------------------------------------------------------
+    // Dynamic Render Handlers
+    // -------------------------------------------------------------
+    function renderActiveView() {
+      // Reload from DB state to avoid sync holes
+      state.expenses = DB.get('expenses');
+      state.lending = DB.get('lending');
+      state.tasks = DB.get('tasks');
+      state.habits = DB.get('habits');
+      state.notifications = DB.get('notifications');
+
+      switch (state.currentTab) {
+        case 'home':
+          drawHome();
+          break;
+        case 'expenses':
+          drawExpenses();
+          break;
+        case 'lending':
+          drawLending();
+          break;
+        case 'tasks':
+          drawTasks();
+          break;
+        case 'habits':
+          drawHabits();
+          break;
+      }
+    }
+
+    // 1. Dashboard Drawer Home
+    function drawHome() {
+      // Calculate active metrics
+      // Liquid Balance = Salary, Business, etc - expenses
+      let incomeTotal = state.expenses.filter(e => e.type === 'income').reduce((acc, current) => acc + parseFloat(current.amount), 0);
+      let expenseTotal = state.expenses.filter(e => e.type === 'expense').reduce((acc, current) => acc + parseFloat(current.amount), 0);
+      let netWorth = incomeTotal - expenseTotal;
+      $('#home-net-worth').text(UTILS.formatCurrency(netWorth));
+
+      // Lending targets to collect/pay
+      let pendingLent = state.lending.filter(l => l.type === 'lent' && l.status !== 'Paid').reduce((acc, c) => acc + parseFloat(c.amount), 0);
+      let pendingBorrowed = state.lending.filter(l => l.type === 'borrowed' && l.status !== 'Paid').reduce((acc, c) => acc + parseFloat(c.amount), 0);
+      $('#home-lent-indicator').text('+$' + pendingLent.toFixed(2));
+      $('#home-borrowed-indicator').text('-$' + pendingBorrowed.toFixed(2));
+
+      // Spent 7 days total
+      const oneWeekAgo = new Date('2026-06-17T00:00:00');
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      let recentSpent = state.expenses
+        .filter(e => e.type === 'expense' && new Date(e.date + 'T00:00:00') >= oneWeekAgo)
+        .reduce((acc, c) => acc + parseFloat(c.amount), 0);
+      $('#home-spend-week').text(UTILS.formatCurrency(recentSpent));
+
+      // Pending Tasks Counter
+      let pendingTasksCount = state.tasks.filter(t => !t.completed).length;
+      $('#home-tasks-pending').text(`${pendingTasksCount} Pending`);
+
+      // Today's Habit Progress
+      let todayStr = '2026-06-17';
+      let doneHabitsToday = state.habits.filter(h => h.history[todayStr] === true).length;
+      let totalHabitsCount = state.habits.length || 1;
+      let habitPct = Math.round((doneHabitsToday / totalHabitsCount) * 100) || 0;
+      $('#home-habit-pct').text(habitPct + '%');
+      $('#home-habit-progress-bar').css('width', habitPct + '%');
+
+      // Populate Dynamically Sorted Dynamic Timeline Feed
+      let combinedTimeline = [];
+      
+      state.expenses.forEach(x => {
+        combinedTimeline.push({
+          dateObj: new Date(x.date + 'T00:00:00'),
+          rawDate: x.date,
+          itemTitle: x.description || x.category,
+          amountText: (x.type === 'income' ? '+' : '-') + UTILS.formatCurrency(x.amount),
+          badgeColor: x.type === 'income' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-coffee-bean/10 text-coffee-bean',
+          icon: x.type === 'income' ? 'fa-wallet' : 'fa-receipt',
+          meta: `Wallet Log (${x.category})`
+        });
+      });
+
+      state.lending.forEach(l => {
+        combinedTimeline.push({
+          dateObj: new Date(l.dueDate + 'T00:00:00'),
+          rawDate: l.dueDate,
+          itemTitle: `${l.type === 'lent' ? 'Lent' : 'Borrowed'} with ${l.person}`,
+          amountText: UTILS.formatCurrency(l.amount),
+          badgeColor: l.type === 'lent' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-600/10 text-amber-600',
+          icon: 'fa-hand-holding-dollar',
+          meta: `Lending Tracker • Due ${l.dueDate}`
+        });
+      });
+
+      state.tasks.forEach(t => {
+        combinedTimeline.push({
+          dateObj: new Date(t.dueDate + 'T00:00:00'),
+          rawDate: t.dueDate,
+          itemTitle: t.title,
+          amountText: t.completed ? 'Cleared' : 'Active',
+          badgeColor: t.completed ? 'bg-olive-dusty/10 text-olive-dusty' : 'bg-red-500/10 text-[#d93838]',
+          icon: 'fa-circle-check',
+          meta: `Task Priority: ${t.priority}`
+        });
+      });
+
+      // Sort chronological newest first
+      combinedTimeline.sort((a,b) => b.dateObj - a.dateObj);
+      
+      let feedHtml = '';
+      let topFive = combinedTimeline.slice(0, 5);
+      
+      if (topFive.length === 0) {
+        feedHtml = `
+          <div class="text-center py-8 text-xs text-olive-dusty/50">
+            <i class="fa-solid fa-hourglass text-xl mb-2 block"></i> No timeline records logged
+          </div>`;
+      } else {
+        topFive.forEach(item => {
+          feedHtml += `
+            <div class="glass-card rounded-2xl p-3 flex justify-between items-center trans-slow hover:border-coffee-bean/30 border border-white/50">
+              <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl ${item.badgeColor} flex items-center justify-center text-sm"><i class="fa-solid ${item.icon}"></i></div>
+                <div>
+                  <h4 class="text-xs font-bold text-ebony-dark line-clamp-1">${item.itemTitle}</h4>
+                  <p class="text-[9px] font-mono font-medium text-olive-dusty/60 mt-0.5">${item.meta}</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-mono font-bold text-ebony">${item.amountText}</span>
+              </div>
+            </div>`;
+        });
+      }
+      $('#activity-feed-container').html(feedHtml);
+    }
+
+    // 2. View: Expenses Wallet Render
+    function drawExpenses() {
+      let incomeTotal = state.expenses.filter(e => e.type === 'income').reduce((acc, current) => acc + parseFloat(current.amount), 0);
+      let expenseTotal = state.expenses.filter(e => e.type === 'expense').reduce((acc, current) => acc + parseFloat(current.amount), 0);
+      let balance = incomeTotal - expenseTotal;
+
+      $('#exp-total-balance').text(UTILS.formatCurrency(balance));
+      $('#exp-total-income').text('+$' + incomeTotal.toLocaleString(undefined, {minimumFractionDigits: 2}));
+      $('#exp-total-expense').text('-$' + expenseTotal.toLocaleString(undefined, {minimumFractionDigits: 2}));
+
+      // Timeline frame filter selection
+      let filteredExpenses = [...state.expenses];
+      const today = new Date('2026-06-17T00:00:00');
+      
+      if (state.expenseFilter === 'daily') {
+        filteredExpenses = state.expenses.filter(e => e.date === '2026-06-17');
+      } else if (state.expenseFilter === 'weekly') {
+        const lastWeek = new Date('2026-06-17T00:00:00');
+        lastWeek.setDate(lastWeek.getDate() - 7);
+        filteredExpenses = state.expenses.filter(e => new Date(e.date + 'T00:00:00') >= lastWeek);
+      } else if (state.expenseFilter === 'monthly') {
+        const firstOfMonth = new Date('2026-06-01T00:00:00');
+        filteredExpenses = state.expenses.filter(e => new Date(e.date + 'T00:00:00') >= firstOfMonth);
+      }
+
+      // Render Categories Progress Bars against custom static budget
+      let spendByCat = {};
+      Object.keys(categoryBudgets).forEach(c => spendByCat[c] = 0);
+      
+      state.expenses.filter(e => e.type === 'expense').forEach(e => {
+        let cat = e.category || 'Others';
+        if (!spendByCat[cat]) spendByCat[cat] = 0;
+        spendByCat[cat] += parseFloat(e.amount);
+      });
+
+      let budgetBarsHtml = '';
+      Object.keys(categoryBudgets).forEach(cat => {
+        let actual = spendByCat[cat] || 0;
+        let limit = categoryBudgets[cat];
+        let pct = Math.min(Math.round((actual / limit) * 100), 100);
+        let barColorCls = pct >= 90 ? 'bg-[#d93838]' : pct >= 65 ? 'bg-amber-500' : 'bg-gradient-to-r from-coffee-bean to-camel';
+
+        budgetBarsHtml += `
+          <div>
+            <div class="flex justify-between items-center text-[10px] mb-1">
+              <span class="font-bold text-ebony">${cat}</span>
+              <span class="font-mono text-olive-dusty font-bold">${UTILS.formatCurrency(actual)} / <span class="text-olive-dusty/50">${UTILS.formatCurrency(limit)}</span></span>
+            </div>
+            <div class="w-full bg-olive-dusty/10 h-1.5 rounded-full overflow-hidden">
+              <div class="${barColorCls} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+          </div>`;
+      });
+      $('#expense-budget-bars').html(budgetBarsHtml);
+
+      // Render List of transactions in filter
+      let transHtml = '';
+      // Sort in descending order
+      filteredExpenses.sort((a,b) => new Date(b.date + 'T00:00:00') - new Date(a.date + 'T00:00:00') || b.id - a.id);
+
+      if (filteredExpenses.length === 0) {
+        transHtml = `
+          <div class="text-center py-10 text-xs text-olive-dusty/50 glass-card rounded-2xl border border-dashed border-white/50">
+            <i class="fa-solid fa-receipt text-2xl mb-2 block text-olive-dusty/40"></i> No transactions logged this period
+          </div>`;
+      } else {
+        filteredExpenses.forEach(trans => {
+          let isIncome = trans.type === 'income';
+          let iconClass = 'fa-coins';
+          let colorCls = 'text-coffee-bean bg-coffee-bean/10';
+
+          if (trans.category === 'Food') { iconClass = 'fa-utensils'; colorCls = 'text-amber-700 bg-amber-500/10'; }
+          else if (trans.category === 'Transport') { iconClass = 'fa-car'; colorCls = 'text-blue-700 bg-blue-500/10'; }
+          else if (trans.category === 'Rent') { iconClass = 'fa-house-chimney'; colorCls = 'text-purple-700 bg-purple-500/10'; }
+          else if (trans.category === 'Shopping') { iconClass = 'fa-bag-shopping'; colorCls = 'text-pink-700 bg-pink-500/10'; }
+          else if (trans.category === 'Entertainment') { iconClass = 'fa-film'; colorCls = 'text-indigo-700 bg-indigo-500/10'; }
+          else if (trans.category === 'Salary') { iconClass = 'fa-briefcase'; colorCls = 'text-emerald-700 bg-emerald-500/10'; }
+
+          transHtml += `
+            <div class="glass-card rounded-2xl p-3.5 flex justify-between items-center border border-white/40">
+              <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl ${colorCls} flex items-center justify-center text-sm"><i class="fa-solid ${iconClass}"></i></div>
+                <div>
+                  <h4 class="text-xs font-bold text-ebony-dark">${trans.description || trans.category}</h4>
+                  <p class="text-[9px] font-mono text-olive-dusty/60 mt-0.5">${trans.category} • ${trans.date}</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-3">
+                <span class="text-xs font-mono font-extrabold ${isIncome ? 'text-emerald-600' : 'text-ebony'}">${isIncome ? '+' : '-'}${UTILS.formatCurrency(trans.amount)}</span>
+                <button onclick="deleteExpenseItem(${trans.id})" class="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/5 text-[#d93838] border border-red-500/10 hover:bg-red-500/10 transition-all active:scale-90"><i class="fa-regular fa-trash-can text-xs"></i></button>
+              </div>
+            </div>`;
+        });
+      }
+      $('#expense-transactions-list').html(transHtml);
+    }
+
+    // 3. View: Lending Ledger Tracker
+    function drawLending() {
+      // Net stats calculation
+      let totalLent = state.lending.filter(l => l.type === 'lent' && l.status !== 'Paid').reduce((acc, c) => acc + parseFloat(c.amount), 0);
+      let totalBorrowed = state.lending.filter(l => l.type === 'borrowed' && l.status !== 'Paid').reduce((acc, c) => acc + parseFloat(c.amount), 0);
+      
+      $('#lend-total-lent').text(UTILS.formatCurrency(totalLent));
+      $('#lend-total-borrowed').text(UTILS.formatCurrency(totalBorrowed));
+
+      // Filter Logic
+      let listData = [...state.lending];
+      if (state.lendingFilter === 'lent') {
+        listData = state.lending.filter(l => l.type === 'lent');
+      } else if (state.lendingFilter === 'borrowed') {
+        listData = state.lending.filter(l => l.type === 'borrowed');
+      } else if (state.lendingFilter === 'overdue') {
+        // Redifine status logically if past June 17, 2026 and not Paid
+        const today = new Date('2026-06-17T00:00:00');
+        listData = state.lending.filter(l => l.status !== 'Paid' && new Date(l.dueDate + 'T00:00:00') < today);
+      }
+
+      let debtHtml = '';
+      if (listData.length === 0) {
+        debtHtml = `
+          <div class="text-center py-10 text-xs text-olive-dusty/50 glass-card rounded-2xl border border-dashed border-white/50">
+            <i class="fa-solid fa-hand-holding-dollar text-2xl mb-2 block text-olive-dusty/40"></i> No matching loan items listed
+          </div>`;
+      } else {
+        listData.forEach(item => {
+          let resolved = item.status === 'Paid';
+          
+          // Re-evaluate overdue dynamically
+          const dDate = new Date(item.dueDate + 'T00:00:00');
+          const tDate = new Date('2026-06-17T00:00:00');
+          let displayStatus = item.status;
+          if (item.status !== 'Paid' && dDate < tDate) {
+            displayStatus = 'Overdue';
+          }
+
+          let statusBadgeCls = 'bg-amber-500/10 text-amber-600 border border-amber-500/20';
+          if (resolved) statusBadgeCls = 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+          if (displayStatus === 'Overdue') statusBadgeCls = 'bg-red-500/10 text-[#d93838] border-red-500/20';
+
+          let arrowIcon = item.type === 'lent' ? 'fa-arrow-up-right-from-square text-emerald-600 bg-emerald-500/10' : 'fa-arrow-down-left-from-square text-[#d93838] bg-red-500/10';
+          let actionBtn = resolved ? '' : `<button onclick="settleLendingDebt(${item.id})" class="ml-2 w-7 h-7 flex items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 active:scale-90 hover:bg-emerald-500/20 transition-all" title="Mark Settled"><i class="fa-solid fa-check text-xs"></i></button>`;
+
+          debtHtml += `
+            <div class="glass-card rounded-[22px] p-3.5 border border-white/40 shadow-sm flex flex-col justify-between mb-2">
+              <div class="flex justify-between items-start">
+                <div class="flex items-center space-x-2.5">
+                  <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs ${arrowIcon}"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                  <div>
+                    <h4 class="text-xs font-extrabold text-ebony-dark">${item.person}</h4>
+                    <span class="text-[9px] font-mono font-bold tracking-wider uppercase text-olive-dusty/60">${item.type === 'lent' ? 'You Lent' : 'You Borrowed'}</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs font-mono font-extrabold text-ebony block">${UTILS.formatCurrency(item.amount)}</span>
+                  <span class="text-[9px] font-mono text-olive-dusty block mt-0.5">${UTILS.formatDateLabel(item.dueDate)}</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center mt-3 pt-3 border-t border-olive-dusty/5">
+                <span class="text-[9.5px] font-mono px-2.5 py-0.5 rounded-full font-bold ${statusBadgeCls}">${displayStatus}</span>
+                <div class="flex items-center">
+                  <button onclick="editOutstandingAmount(${item.id})" class="w-7 h-7 flex items-center justify-center rounded-lg bg-olive-dusty/5 text-olive-dusty border border-olive-dusty/10 active:scale-90 hover:bg-olive-dusty/10 transition-all" title="Adjust Amount"><i class="fa-solid fa-pen text-[10px]"></i></button>
+                  ${actionBtn}
+                  <button onclick="deleteLendingDebt(${item.id})" class="ml-2 w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/5 text-[#d93838] border border-red-500/10 active:scale-95 transition-all"><i class="fa-regular fa-trash-can text-[10px]"></i></button>
+                </div>
+              </div>
+            </div>`;
+        });
+      }
+      $('#lending-tracker-list').html(debtHtml);
+    }
+
+    // 4. View: Task Manager Render
+    function drawTasks() {
+      // Calculate active task statistics
+      let todayStr = '2026-06-17';
+      let dueTodayTasks = state.tasks.filter(t => t.dueDate === todayStr);
+      let completedTodayTasks = dueTodayTasks.filter(t => t.completed).length;
+      let totalTodayTasks = dueTodayTasks.length;
+
+      let pct = totalTodayTasks > 0 ? Math.round((completedTodayTasks / totalTodayTasks) * 100) : 0;
+      if (totalTodayTasks === 0) {
+        // Fallback global completeness gauge
+        let totalAll = state.tasks.length;
+        let compAll = state.tasks.filter(t => t.completed).length;
+        pct = totalAll > 0 ? Math.round((compAll / totalAll) * 100) : 0;
+      }
+
+      $('#task-pct-value').text(pct + '%');
+      
+      // Update SVG circular indicator dash offset. R=28 circumference = 2*PI*R = 175.92
+      let dashArrayCircumference = 175;
+      let dashOffset = dashArrayCircumference - (dashArrayCircumference * pct / 100);
+      $('#task-radial-indicator').css('stroke-dashoffset', dashOffset);
+      
+      let encouragementLabel = "Plan Ahead & Win";
+      if (pct === 100) encouragementLabel = "Clean Slate! Brilliant!";
+      else if (pct >= 75) encouragementLabel = "Wrapping up beautifully!";
+      else if (pct >= 50) encouragementLabel = "Midway clear. Keep pushing!";
+      else if (pct > 0) encouragementLabel = "Underway! Great momentum";
+      $('#task-completion-text').text(encouragementLabel);
+
+      // Filter tasks by selection and query search
+      let sortedTasks = [...state.tasks];
+      
+      if (state.searchQuery.trim().length > 0) {
+        let keyword = state.searchQuery.toLowerCase();
+        sortedTasks = sortedTasks.filter(t => t.title.toLowerCase().includes(keyword));
+      }
+
+      if (state.taskFilter === 'pending') {
+        sortedTasks = sortedTasks.filter(t => !t.completed);
+      } else if (state.taskFilter === 'completed') {
+        sortedTasks = sortedTasks.filter(t => t.completed);
+      } else if (state.taskFilter === 'high') {
+        sortedTasks = sortedTasks.filter(t => t.priority === 'High');
+      }
+
+      // Render items
+      let taskListHtml = '';
+      if (sortedTasks.length === 0) {
+        taskListHtml = `
+          <div class="text-center py-10 text-xs text-olive-dusty/50 glass-card rounded-2xl border border-dashed border-white/50">
+            <i class="fa-solid fa-list-check text-2xl mb-2 block text-olive-dusty/40"></i> No tasks found here
+          </div>`;
+      } else {
+        sortedTasks.forEach(item => {
+          let priorityBadgeCls = 'bg-blue-500/10 text-blue-600';
+          if (item.priority === 'High') priorityBadgeCls = 'bg-red-500/10 text-[#d93838]';
+          if (item.priority === 'Medium') priorityBadgeCls = 'bg-amber-600/10 text-amber-600';
+
+          taskListHtml += `
+            <div class="glass-card rounded-2xl p-4 flex justify-between items-center transition-all border border-white/40 ${item.completed ? 'opacity-70 bg-white/45' : ''}">
+              <div class="flex items-center space-x-3.5 flex-1">
+                <button onclick="toggleTaskCheckbox(${item.id})" class="w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${item.completed ? 'bg-coffee-bean border-coffee-bean text-white' : 'border-olive-dusty/25 bg-white'}" id="chk-btn-${item.id}">
+                  ${item.completed ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+                </button>
+                <div class="flex-1">
+                  <h4 class="text-xs font-bold text-ebony-dark ${item.completed ? 'line-through text-olive-dusty/60' : ''}">${item.title}</h4>
+                  <div class="flex items-center space-x-2 mt-1">
+                    <span class="text-[8px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${priorityBadgeCls}">${item.priority}</span>
+                    <span class="text-[9px] font-mono text-olive-dusty/60"><i class="fa-regular fa-calendar-check mr-1"></i>${UTILS.formatDateLabel(item.dueDate)}</span>
+                  </div>
+                </div>
+              </div>
+              <button onclick="deleteTaskItem(${item.id})" class="ml-2 w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/5 text-[#d93838] border border-red-500/10 hover:bg-red-500/10 transition-all active:scale-90"><i class="fa-regular fa-trash-can text-xs"></i></button>
+            </div>`;
+        });
+      }
+      $('#tasks-holder-stack').html(taskListHtml);
+    }
+
+    // 5. View: Habits Tracker Applet Render
+    function drawHabits() {
+      // Habit Score points sum of active history or streak counts
+      let totalStreaksSum = state.habits.reduce((acc, h) => acc + h.streak, 0);
+      $('#habit-total-points').text(`${totalStreaksSum} Streak Days`);
+
+      // Draw Habits Cards containing 7-day mini tracker calendar grids
+      let habitStackHtml = '';
+      
+      if (state.habits.length === 0) {
+        habitStackHtml = `
+          <div class="text-center py-10 text-xs text-olive-dusty/50 glass-card rounded-2xl border border-dashed border-white/50">
+            <i class="fa-solid fa-seedling text-2xl mb-2 block text-olive-dusty/40"></i> No habits registered! Start fresh
+          </div>`;
+      } else {
+        // Last 7 days definitions
+        const datesOfWeek_str = [];
+        const baseDate = new Date('2026-06-17T00:00:00');
+        // Subtract up to 6 days
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date('2026-06-17T00:00:00');
+          d.setDate(baseDate.getDate() - i);
+          const yyyy = d.getFullYear();
+          const mm = String(d.getMonth() + 1).padStart(2, '0');
+          const dd = String(d.getDate()).padStart(2, '0');
+          datesOfWeek_str.push(`${yyyy}-${mm}-${dd}`);
+        }
+
+        state.habits.forEach(habit => {
+          let todayStr = '2026-06-17';
+          let doneToday = habit.history[todayStr] === true;
+
+          // Create calendar indicator circles for last 7 days
+          let dotTimelineHtml = '';
+          datesOfWeek_str.forEach((dayStr, idx) => {
+            const isCompleted = habit.history[dayStr] === true;
+            const singleDigitDay = dayStr.split('-')[2];
+            const isCurrentDay = dayStr === todayStr;
+            const circleColorCls = isCompleted 
+              ? 'bg-coffee-bean text-white' 
+              : 'bg-olive-dusty/10 text-olive-dusty/60 hover:bg-coffee-bean/20';
+
+            dotTimelineHtml += `
+              <button onclick="toggleHabitDay('${habit.id}', '${dayStr}')" class="w-7 h-7 rounded-full text-[9px] font-mono font-bold flex items-center justify-center ${circleColorCls} ${isCurrentDay ? 'ring-2 ring-coffee-bean/30' : ''} active:scale-90 transition-all">
+                ${singleDigitDay}
+              </button>`;
+          });
+
+          habitStackHtml += `
+            <div class="glass-card rounded-[24px] p-4 border border-white/40">
+              <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center space-x-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-coffee-bean/10 text-coffee-bean flex items-center justify-center text-sm"><i class="fa-solid fa-seedling"></i></div>
+                  <div>
+                    <h4 class="text-xs font-bold text-ebony-dark">${habit.name}</h4>
+                    <span class="text-[9px] font-mono text-coffee-bean/70 font-semibold uppercase flex items-center"><i class="fa-solid fa-fire mr-1 text-[#d93838]"></i>${habit.streak} day streak</span>
+                  </div>
+                </div>
+                <div class="flex space-x-1.5">
+                  <button onclick="incrementHabitStreak(${habit.id})" class="w-7 h-7 flex items-center justify-center rounded-lg bg-coffee-bean/5 text-coffee-bean border border-coffee-bean/10 active:scale-95 transition-all" title="Streak Done Today!"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                  <button onclick="deleteHabitItem(${habit.id})" class="w-7 h-7 flex items-center justify-center rounded-lg bg-red-500/5 text-[#d93838] border border-red-500/10 active:scale-95 transition-all"><i class="fa-regular fa-trash-can text-[10px]"></i></button>
+                </div>
+              </div>
+              
+              <!-- 7 Day Grid -->
+              <div class="flex justify-between items-center bg-olive-dusty/5 p-2.5 rounded-xl">
+                ${dotTimelineHtml}
+              </div>
+            </div>`;
+        });
+      }
+      $('#habits-holder-stack').html(habitStackHtml);
+    }
+
+    // -------------------------------------------------------------
+    // Data Mutation Functions & CRUD
+    // -------------------------------------------------------------
+    
+    // Add transaction
+    function processAddExpense(type, amount, category, description, date) {
+      if (!amount || amount <= 0) {
+        triggerToast("Please provide positive amount", "fa-circle-xmark");
+        return;
+      }
+      
+      let items = DB.get('expenses');
+      let newItem = {
+        id: Date.now(),
+        type: type,
+        amount: parseFloat(amount),
+        category: category,
+        description: description || category,
+        date: date || '2026-06-17'
+      };
+
+      items.push(newItem);
+      DB.set('expenses', items);
+      
+      // Auto-inject system notification if we are near budget limits
+      if (type === 'expense') {
+        const catSpent = items.filter(e => e.type === 'expense' && e.category === category).reduce((sum, e) => sum + e.amount, 0);
+        const limit = categoryBudgets[category] || 300.00;
+        if (catSpent >= limit) {
+          addNotificationText(`Warning: ${category} spent limit reached (${UTILS.formatCurrency(catSpent)}/${UTILS.formatCurrency(limit)})!`, 'warning');
+        }
+      }
+
+      triggerToast("Successful transaction log!");
+      closeFormSheet();
+      renderActiveView();
+    }
+
+    // Settling overall loans
+    function settleLendingDebt(id) {
+      let lending = DB.get('lending');
+      let matchIdx = lending.findIndex(l => l.id == id);
+      if (matchIdx !== -1) {
+        let loan = lending[matchIdx];
+        loan.status = 'Paid';
+        DB.set('lending', lending);
+        
+        // Push settle directly as transaction log also!
+        processAddExpense(
+          loan.type === 'lent' ? 'income' : 'expense',
+          loan.amount,
+          'Others',
+          `Settle: ${loan.person}`,
+          '2026-06-17'
+        );
+
+        addNotificationText(`Settlement registered with ${loan.person}.`, 'success');
+        triggerToast("Settlement compiled!");
+        renderActiveView();
+      }
+    }
+
+    // Adjust outstanding debt amount
+    function editOutstandingAmount(id) {
+      let lending = DB.get('lending');
+      let item = lending.find(l => l.id == id);
+      if (item) {
+        let newAmount = prompt(`Adjust pending amount with ${item.person} (Rs.):`, item.amount);
+        if (newAmount !== null && parseFloat(newAmount) > 0) {
+          item.amount = parseFloat(newAmount);
+          DB.set('lending', lending);
+          triggerToast("Log updated successfully");
+          renderActiveView();
+        }
+      }
+    }
+
+    // Delete elements
+    function deleteExpenseItem(id) {
+      let items = DB.get('expenses').filter(x => x.id != id);
+      DB.set('expenses', items);
+      triggerToast("Transaction deleted");
+      renderActiveView();
+    }
+
+    function deleteLendingDebt(id) {
+      let items = DB.get('lending').filter(x => x.id != id);
+      DB.set('lending', items);
+      triggerToast("Lending record cleared");
+      renderActiveView();
+    }
+
+    function deleteTaskItem(id) {
+      let items = DB.get('tasks').filter(x => x.id != id);
+      DB.set('tasks', items);
+      triggerToast("Task deleted");
+      renderActiveView();
+    }
+
+    function deleteHabitItem(id) {
+      let items = DB.get('habits').filter(x => x.id != id);
+      DB.set('habits', items);
+      triggerToast("Habit deleted");
+      renderActiveView();
+    }
+
+    // Add general elements
+    function processAddLending(type, person, amount, date) {
+      if (!person.trim() || !amount || amount <= 0) {
+        triggerToast("Fill name and amount", "fa-circle-xmark");
+        return;
+      }
+      let items = DB.get('lending');
+      items.push({
+        id: Date.now(),
+        type: type,
+        person: person,
+        amount: parseFloat(amount),
+        dueDate: date || '2026-06-18',
+        status: 'Pending',
+        payments: []
+      });
+      DB.set('lending', items);
+      
+      addNotificationText(`New dynamic loan logged with ${person}.`, 'info');
+      triggerToast("Outstanding loan tracked!");
+      closeFormSheet();
+      renderActiveView();
+    }
+
+    function processAddTask(title, priority, date) {
+      if (!title.trim()) {
+        triggerToast("Fill task focus heading", "fa-circle-xmark");
+        return;
+      }
+      let items = DB.get('tasks');
+      items.push({
+        id: Date.now(),
+        title: title,
+        priority: priority,
+        dueDate: date || '2026-06-17',
+        completed: false
+      });
+      DB.set('tasks', items);
+      triggerToast("Active task added!");
+      closeFormSheet();
+      renderActiveView();
+    }
+
+    function processAddHabit(name) {
+      if (!name.trim()) {
+        triggerToast("Provide habit action name", "fa-circle-xmark");
+        return;
+      }
+      let items = DB.get('habits');
+      items.push({
+        id: Date.now(),
+        name: name,
+        streak: 0,
+        history: {}
+      });
+      DB.set('habits', items);
+      triggerToast("Daily habit seeded!");
+      closeFormSheet();
+      renderActiveView();
+    }
+
+    // Checkbox toggling for tasks
+    function toggleTaskCheckbox(id) {
+      let tasks = DB.get('tasks');
+      let idx = tasks.findIndex(t => t.id == id);
+      if (idx !== -1) {
+        tasks[idx].completed = !tasks[idx].completed;
+        DB.set('tasks', tasks);
+        
+        UTILS.playChime();
+        triggerToast(tasks[idx].completed ? "Task cleared! Level up!" : "Task marked active");
+        renderActiveView();
+      }
+    }
+
+    // Habit individual history check
+    function toggleHabitDay(habitId, dayStr) {
+      let habits = DB.get('habits');
+      let idx = habits.findIndex(h => h.id == habitId);
+      if (idx !== -1) {
+        let h = habits[idx];
+        let currState = h.history[dayStr] === true;
+        h.history[dayStr] = !currState;
+
+        // Auto re-recalculate streak logically
+        let datesSorted = Object.keys(h.history).filter(d => h.history[d] === true);
+        h.streak = datesSorted.length || 0;
+
+        DB.set('habits', habits);
+        UTILS.playChime();
+        triggerToast(`Habit updated for ${dayStr.split('-')[2]}!`);
+        renderActiveView();
+      }
+    }
+
+    // Easy streak incremental tap
+    function incrementHabitStreak(habitId) {
+      let habits = DB.get('habits');
+      let idx = habits.findIndex(h => h.id == habitId);
+      if (idx !== -1) {
+        let h = habits[idx];
+        let today = '2026-06-17';
+        h.history[today] = true;
+        h.streak += 1;
+        
+        DB.set('habits', habits);
+        UTILS.playChime();
+        triggerToast("Added streak for today!");
+        renderActiveView();
+      }
+    }
+
+    // Notification manipulation
+    function addNotificationText(msg, type = 'info') {
+      let alerts = DB.get('notifications');
+      alerts.unshift({
+        id: Date.now(),
+        text: msg,
+        time: 'Just now',
+        type: type
+      });
+      DB.set('notifications', alerts);
+      drawNotifications();
+    }
+
+    function clearNotificationAlerts() {
+      DB.set('notifications', []);
+      drawNotifications();
+      triggerToast("Cleared alerts tray");
+    }
+
+    function drawNotifications() {
+      let alerts = DB.get('notifications');
+      let content = '';
+      if (alerts.length === 0) {
+        content = `
+          <div class="text-center py-10 text-xs text-olive-dusty/40 italic">
+            <i class="fa-regular fa-bell-slash text-2xl mb-2 block"></i> No system notifications
+          </div>`;
+      } else {
+        alerts.forEach(item => {
+          let sideCls = 'border-l-4 border-blue-500';
+          if (item.type === 'warning') sideCls = 'border-l-4 border-red-500';
+          if (item.type === 'success') sideCls = 'border-l-4 border-emerald-500';
+
+          content += `
+            <div class="p-3 rounded-xl bg-olive-dusty/5 text-xs text-ebony-dark ${sideCls} flex flex-col justify-between">
+              <span class="font-medium line-clamp-2">${item.text}</span>
+              <span class="text-[8px] font-mono text-olive-dusty/50 mt-1 pb-0.5">${item.time}</span>
+            </div>`;
+        });
+      }
+      $('#notification-sidebar-list').html(content);
+    }
+
+    // -------------------------------------------------------------
+    // Sliding Native Bottom Forms sheets setup
+    // -------------------------------------------------------------
+    function openFormSheet(formType) {
+      let formHtml = '';
+      if (formType === 'expense') {
+        formHtml = `
+          <h3 class="text-sm font-extrabold text-ebony-dark mb-4 flex items-center bg-white/20 p-1 rounded-xl"><i class="fa-solid fa-receipt text-coffee-bean mr-1.5"></i> Log New Transaction</h3>
+          
+          <div class="space-y-4 text-xs font-sans">
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Transaction Category Type</span>
+              <div class="flex space-x-2">
+                <button type="button" onclick="toggleFormTypeBtn(this, 'expense')" class="form-type-btn flex-1 py-2 rounded-xl font-bold bg-[#d93838] text-white" id="f-type-exp">Expense</button>
+                <button type="button" onclick="toggleFormTypeBtn(this, 'income')" class="form-type-btn flex-1 py-2 rounded-xl font-bold bg-white text-olive-dusty border border-olive-dusty/10" id="f-type-inc">Income</button>
+              </div>
+              <input type="hidden" id="f-type-val" value="expense">
+            </div>
+            
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Outstanding Cash Amount (Rs.)</span>
+              <input type="number" step="1" id="f-amount" placeholder="0" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white text-sm font-semibold outline-none focus:border-coffee-bean font-mono">
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Account Ledger Category</span>
+              <select id="f-category" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean">
+                <option value="Food">Food & Beverage (Budget Limit: Rs. 35,000)</option>
+                <option value="Transport">Transport (Budget Limit: Rs. 12,000)</option>
+                <option value="Rent">Rent & Living (Budget Limit: Rs. 150,000)</option>
+                <option value="Shopping">Shopping & Outerwear (Budget Limit: Rs. 40,000)</option>
+                <option value="Entertainment">Charity & Entertainment (Budget Limit: Rs. 25,000)</option>
+                <option value="Others">Others / Sundry (Budget Limit: Rs. 30,000)</option>
+                <option value="Salary">Inbound: Salary / consulting</option>
+              </select>
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Brief Ledger Description</span>
+              <input type="text" id="f-desc" placeholder="e.g., Organic Coffee Roast" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean">
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Posting Date</span>
+              <input type="date" id="f-date" value="2026-06-17" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
+            </div>
+
+            <button type="button" onclick="submitExpenseForm()" class="w-full mt-2 py-3 bg-gradient-to-r from-coffee-bean to-camel text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-button active:scale-95 transition-all">Publish Transaction</button>
+          </div>`;
+      } else if (formType === 'lending') {
+        formHtml = `
+          <h3 class="text-sm font-extrabold text-ebony-dark mb-4 flex items-center bg-white/20 p-1 rounded-xl"><i class="fa-solid fa-hand-holding-dollar text-camel mr-1.5"></i> Add Lending Record</h3>
+          
+          <div class="space-y-4 text-xs">
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Lending Type Direction</span>
+              <div class="flex space-x-2">
+                <button type="button" onclick="toggleFormTypeBtn(this, 'lent')" class="form-type-btn flex-1 py-1.5 rounded-lg font-bold bg-coffee-bean text-white" id="f-lending-lent">I Lent To Someone</button>
+                <button type="button" onclick="toggleFormTypeBtn(this, 'borrowed')" class="form-type-btn flex-1 py-1.5 rounded-lg font-bold bg-white text-olive-dusty border border-olive-dusty/10" id="f-lending-borrowed">I Borrowed From Someone</button>
+              </div>
+              <input type="hidden" id="f-lending-type-val" value="lent">
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Person / entity name</span>
+              <input type="text" id="f-lending-person" placeholder="e.g., Sarah Jenkins" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-medium">
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Commit Amount (Rs.)</span>
+              <input type="number" step="1" id="f-lending-amount" placeholder="0" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Final Due Date limit</span>
+              <input type="date" id="f-lending-date" value="2026-06-25" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
+            </div>
+
+            <button type="button" onclick="submitLendingForm()" class="w-full mt-2 py-3 bg-gradient-to-r from-coffee-bean to-camel text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-button active:scale-95 transition-all">Submit Entry</button>
+          </div>`;
+      } else if (formType === 'task') {
+        formHtml = `
+          <h3 class="text-sm font-extrabold text-ebony-dark mb-4 flex items-center bg-white/20 p-1 rounded-xl"><i class="fa-solid fa-circle-check text-olive-dusty mr-1.5"></i> Create New Focus Task</h3>
+          
+          <div class="space-y-4 text-xs">
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Task Title Focus</span>
+              <input type="text" id="f-task-title" placeholder="e.g., Renew insurance premium" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean">
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Task Priority Class Selection</span>
+              <select id="f-task-priority" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean">
+                <option value="High">🔴 High Priority (Immediate limit)</option>
+                <option value="Medium">🟡 Medium Priority (Intermediary)</option>
+                <option value="Low">🟢 Low Priority (Casual follow)</option>
+              </select>
+            </div>
+
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Settled Due-Date</span>
+              <input type="date" id="f-task-date" value="2026-06-17" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
+            </div>
+
+            <button type="button" onclick="submitTaskForm()" class="w-full mt-2 py-3 bg-[#414833] text-white rounded-xl font-bold text-xs uppercase tracking-wider active:scale-95 transition-all">Create New Task</button>
+          </div>`;
+      } else if (formType === 'habit') {
+        formHtml = `
+          <h3 class="text-sm font-extrabold text-ebony-dark mb-4 flex items-center bg-white/20 p-1 rounded-xl"><i class="fa-solid fa-seedling text-[#656d4a] mr-1.5"></i> Seed Seedling Habit</h3>
+          
+          <div class="space-y-4 text-xs">
+            <div>
+              <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Habit action title</span>
+              <input type="text" id="f-habit-name" placeholder="e.g., Meditate 20 minutes daily" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean">
+            </div>
+
+            <button type="button" onclick="submitHabitForm()" class="w-full mt-2 py-3 bg-[#656d4a] text-white rounded-xl font-bold text-xs uppercase tracking-wider active:scale-95 transition-all">Deploy Habit</button>
+          </div>`;
+      }
+
+      $('#modal-form-content').html(formHtml);
+
+      // Slide up bottom sheet smoothly
+      $('#modal-container').removeClass('opacity-0 pointer-events-none');
+      $('#bottom-sheet').removeClass('translate-y-full').addClass('translate-y-0');
+    }
+
+    function toggleFormTypeBtn(element, value) {
+      $(element).parent().find('button').removeClass('bg-coffee-bean bg-[#d93838] text-white').addClass('bg-white text-olive-dusty border border-olive-dusty/10');
+      
+      let highlightBg = 'bg-coffee-bean';
+      if (value === 'expense') highlightBg = 'bg-[#d93838]';
+      if (value === 'income') highlightBg = 'bg-emerald-600';
+
+      $(element).removeClass('bg-white text-olive-dusty border-olive-dusty/10').addClass(highlightBg + ' text-white');
+      
+      // Update hidden values inside matching form
+      if ($(element).attr('id').startsWith('f-lending')) {
+        $('#f-lending-type-val').val(value);
+      } else {
+        $('#f-type-val').val(value);
+        if (value === 'income') {
+          $('#f-category').val('Salary');
+        } else {
+          $('#f-category').val('Food');
+        }
+      }
+    }
+
+    function closeFormSheet() {
+      $('#bottom-sheet').addClass('translate-y-full').removeClass('translate-y-0');
+      setTimeout(() => {
+        $('#modal-container').addClass('opacity-0 pointer-events-none');
+      }, 150);
+    }
+
+    // Modal submit hooks
+    function submitExpenseForm() {
+      let type = $('#f-type-val').val();
+      let amt = $('#f-amount').val();
+      let cat = $('#f-category').val();
+      let desc = $('#f-desc').val();
+      let date = $('#f-date').val();
+      processAddExpense(type, amt, cat, desc, date);
+    }
+
+    function submitLendingForm() {
+      let type = $('#f-lending-type-val').val();
+      let person = $('#f-lending-person').val();
+      let amt = $('#f-lending-amount').val();
+      let date = $('#f-lending-date').val();
+      processAddLending(type, person, amt, date);
+    }
+
+    function submitTaskForm() {
+      let title = $('#f-task-title').val();
+      let priority = $('#f-task-priority').val();
+      let date = $('#f-task-date').val();
+      processAddTask(title, priority, date);
+    }
+
+    function submitHabitForm() {
+      let name = $('#f-habit-name').val();
+      processAddHabit(name);
+    }
+
+    // -------------------------------------------------------------
+    // Global Floating Action click control logic
+    // -------------------------------------------------------------
+    function triggerFabModalOption() {
+      // Intelligently open the form form sheet of the currently active view
+      if (state.currentTab === 'home') {
+        // Prompt list options or default to spend log
+        openFormSheet('expense');
+      } else if (state.currentTab === 'expenses') {
+        openFormSheet('expense');
+      } else if (state.currentTab === 'lending') {
+        openFormSheet('lending');
+      } else if (state.currentTab === 'tasks') {
+        openFormSheet('task');
+      } else if (state.currentTab === 'habits') {
+        openFormSheet('habit');
+      }
+    }
+
+    // Secondary navigation sidebars
+    function toggleNotificationSidebar() {
+      let sidebar = $('#notification-sidebar');
+      if (sidebar.hasClass('translate-x-full')) {
+        drawNotifications();
+        sidebar.removeClass('translate-x-full');
+      } else {
+        sidebar.addClass('translate-x-full');
+      }
+    }
+
+    // -------------------------------------------------------------
+    // Core Engine App Loading Hooks
+    // -------------------------------------------------------------
+    $(document).ready(function() {
+      // 1. Storage initialization
+      DB.init();
+
+      // 2. Click events linkage for navigation sticky floating bar
+      $('#bottom-sticky-nav a').on('click', function(e) {
+        e.preventDefault();
+        let targetView = $(this).data('view');
+        switchTab(targetView);
+      });
+
+      // 3. Header dynamic greet greeting
+      const hrs = new Date().getHours();
+      let greetingMsg = "Good Morning, Chief";
+      if (hrs >= 17) greetingMsg = "Good Evening, Partner";
+      else if (hrs >= 12) greetingMsg = "Good Afternoon, Patron";
+      $('#greeting-title').text(greetingMsg);
+
+      // Update date format based on system date June 17, 2026
+      $('#live-date').text('Wed, Jun 17 2026');
+
+      // Setup Notification Trigger Bell
+      $('#notification-btn').on('click', toggleNotificationSidebar);
+
+      // Search filters and controls tasks
+      $('#task-search-input').on('input', function() {
+        state.searchQuery = $(this).val();
+        drawTasks();
+      });
+
+      // Task categorization filter chips
+      $('.task-filter-chip').on('click', function() {
+        $('.task-filter-chip').removeClass('bg-gradient-to-r from-coffee-bean to-camel text-white').addClass('bg-white text-olive-dusty');
+        $(this).addClass('bg-gradient-to-r from-coffee-bean to-camel text-white').removeClass('bg-white text-olive-dusty');
+        state.taskFilter = $(this).data('filter');
+        drawTasks();
+      });
+
+      // Expense logs timeline chips selection
+      $('.exp-filter-chip').on('click', function() {
+        $('.exp-filter-chip').removeClass('bg-gradient-to-r from-coffee-bean to-camel text-white').addClass('bg-white text-olive-dusty border-white/50');
+        $(this).addClass('bg-gradient-to-r from-coffee-bean to-camel text-white').removeClass('bg-white text-olive-dusty border-white/50');
+        state.expenseFilter = $(this).data('filter');
+        drawExpenses();
+      });
+
+      // Lending tracker chips filtering selection
+      $('.lending-filter-chip').on('click', function() {
+        $('.lending-filter-chip').removeClass('bg-gradient-to-r from-coffee-bean to-camel text-white').addClass('bg-white text-olive-dusty border-white/50');
+        $(this).addClass('bg-gradient-to-r from-coffee-bean to-camel text-white').removeClass('bg-white text-olive-dusty border-white/50');
+        state.lendingFilter = $(this).data('filter');
+        drawLending();
+      });
+
+      // Clear/Reset entire datasets to refresh app content
+      $('#clear-data-btn').on('click', function() {
+        if (confirm("Are you sure you want to securely clear all records? This will delete all expenses, loans, tasks, and habits to start 100% fresh.")) {
+          DB.clearAll();
+          triggerToast("All database records cleared!", "fa-trash-can");
+          renderActiveView();
+        }
+      });
+
+      $('#reset-data-btn').on('click', function() {
+        if (confirm("Reset layout to clean seed demo records view?")) {
+          DB.reset();
+          triggerToast("PWA sandbox database reset!");
+          renderActiveView();
+        }
+      });
+
+      // Close sheets on escape key or outer container backdrop click
+      $('#modal-container').on('mousedown', function(e) {
+        if (e.target === this) closeFormSheet();
+      });
+
+      // 4. Invoke initial loading sequence
+      switchTab('home');
+
+      // 5. Deluxe Initial Launch Loading Screen Animation Sequence
+      setTimeout(() => {
+        // Trigger progress element fill with luxury timing
+        $('#splash-progress').css('width', '100%');
+      }, 100);
+
+      setTimeout(() => {
+        // Elegant dissolution transition
+        $('#app-splash').addClass('opacity-0 scale-105 pointer-events-none');
+        setTimeout(() => {
+          $('#app-splash').remove(); // Clear element once verified
+        }, 800);
+      }, 1600);
+    });
+  </script>
+</body>
+</html>

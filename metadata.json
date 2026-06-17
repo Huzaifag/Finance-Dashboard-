@@ -1,0 +1,6 @@
+{
+  "name": "Premium Mobile Dashboard",
+  "description": "A premium mobile-first dashboard containing an Expense Manager, Money Lending Tracker, Task Manager, and Habit Tracker with deep LocalStorage integration and polished glassmorphism design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
