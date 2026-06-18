@@ -213,7 +213,7 @@
         <div id="viewport-skeleton" class="hidden transition-all duration-300"></div>
 
         <!-- View 1: Home/Dashboard -->
-        <div id="view-home" class="view-panel transition-all duration-300">
+        <div id="view-home" class="view-panel hidden transition-all duration-300">
           
           <!-- Balance Summary Bento Card -->
           <div class="bg-gradient-to-br from-ebony to-olive-dusty rounded-3xl p-5 text-white shadow-premium mb-5 relative overflow-hidden">
@@ -465,35 +465,8 @@
           <!-- Week-Level Completion History Grid -->
           <div class="glass-card rounded-3xl p-4 mb-5">
             <h3 class="text-xs font-semibold text-ebony-dark mb-3 flex items-center"><i class="fa-solid fa-calendar-days text-coffee-bean mr-1.5"></i> Daily Compliance</h3>
-            <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-mono">
-              <div>
-                <span class="text-olive-dusty/60 font-bold block mb-1">Th</span>
-                <span data-day="2026-06-11" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">11</span>
-              </div>
-              <div>
-                <span class="text-olive-dusty/60 font-bold block mb-1">Fr</span>
-                <span data-day="2026-06-12" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">12</span>
-              </div>
-              <div>
-                <span class="text-olive-dusty/60 font-bold block mb-1">Sa</span>
-                <span data-day="2026-06-13" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">13</span>
-              </div>
-              <div>
-                <span class="text-olive-dusty/60 font-bold block mb-1">Su</span>
-                <span data-day="2026-06-14" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">14</span>
-              </div>
-              <div>
-                <span class="text-olive-dusty/60 font-bold block mb-1">Mo</span>
-                <span data-day="2026-06-15" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">15</span>
-              </div>
-              <div>
-                <span class="text-olive-dusty/60 font-bold block mb-1">Tu</span>
-                <span data-day="2026-06-16" class="day-dot w-7 h-7 mx-auto rounded-full bg-olive-dusty/10 flex items-center justify-center font-bold">16</span>
-              </div>
-              <div>
-                <span class="text-ebony block font-semibold mb-1">We</span>
-                <span data-day="2026-06-17" class="day-dot w-7 h-7 mx-auto rounded-full bg-coffee-bean ring-2 ring-coffee-bean/30 text-white flex items-center justify-center font-semibold shadow-sm">17</span>
-              </div>
+            <div id="compliance-grid" class="grid grid-cols-7 gap-2 text-center text-[10px] font-mono">
+              <!-- Rendered dynamically -->
             </div>
           </div>
  
@@ -680,6 +653,13 @@
     // Utility Helpers
     // -------------------------------------------------------------
     const UTILS = {
+      getTodayStr() {
+        const d = new Date();
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      },
       formatCurrency(num) {
         return 'Rs. ' + Number(num).toLocaleString('en-US', {
           minimumFractionDigits: 0,
@@ -687,9 +667,9 @@
         });
       },
       formatDateLabel(dateStr) {
-        // Humanized countdown labels relative to June 17, 2026
+        // Humanized countdown labels relative to dynamic browser local date
         const target = new Date(dateStr + 'T00:00:00');
-        const today = new Date('2026-06-17T00:00:00');
+        const today = new Date(UTILS.getTodayStr() + 'T00:00:00');
         const diffTime = target - today;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         
@@ -1003,11 +983,11 @@
       // Lending targets to collect/pay
       let pendingLent = state.lending.filter(l => l.type === 'lent' && l.status !== 'Paid').reduce((acc, c) => acc + parseFloat(c.amount), 0);
       let pendingBorrowed = state.lending.filter(l => l.type === 'borrowed' && l.status !== 'Paid').reduce((acc, c) => acc + parseFloat(c.amount), 0);
-      $('#home-lent-indicator').text('+$' + pendingLent.toFixed(2));
-      $('#home-borrowed-indicator').text('-$' + pendingBorrowed.toFixed(2));
+      $('#home-lent-indicator').text('+' + UTILS.formatCurrency(pendingLent));
+      $('#home-borrowed-indicator').text('-' + UTILS.formatCurrency(pendingBorrowed));
 
       // Spent 7 days total
-      const oneWeekAgo = new Date('2026-06-17T00:00:00');
+      const oneWeekAgo = new Date(UTILS.getTodayStr() + 'T00:00:00');
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       let recentSpent = state.expenses
         .filter(e => e.type === 'expense' && new Date(e.date + 'T00:00:00') >= oneWeekAgo)
@@ -1019,7 +999,7 @@
       $('#home-tasks-pending').text(`${pendingTasksCount} Pending`);
 
       // Today's Habit Progress
-      let todayStr = '2026-06-17';
+      let todayStr = UTILS.getTodayStr();
       let doneHabitsToday = state.habits.filter(h => h.history[todayStr] === true).length;
       let totalHabitsCount = state.habits.length || 1;
       let habitPct = Math.round((doneHabitsToday / totalHabitsCount) * 100) || 0;
@@ -1103,21 +1083,21 @@
       let balance = incomeTotal - expenseTotal;
 
       $('#exp-total-balance').text(UTILS.formatCurrency(balance));
-      $('#exp-total-income').text('+$' + incomeTotal.toLocaleString(undefined, {minimumFractionDigits: 2}));
-      $('#exp-total-expense').text('-$' + expenseTotal.toLocaleString(undefined, {minimumFractionDigits: 2}));
+      $('#exp-total-income').text('+' + UTILS.formatCurrency(incomeTotal));
+      $('#exp-total-expense').text('-' + UTILS.formatCurrency(expenseTotal));
 
       // Timeline frame filter selection
       let filteredExpenses = [...state.expenses];
-      const today = new Date('2026-06-17T00:00:00');
+      const today = new Date(UTILS.getTodayStr() + 'T00:00:00');
       
       if (state.expenseFilter === 'daily') {
-        filteredExpenses = state.expenses.filter(e => e.date === '2026-06-17');
+        filteredExpenses = state.expenses.filter(e => e.date === UTILS.getTodayStr());
       } else if (state.expenseFilter === 'weekly') {
-        const lastWeek = new Date('2026-06-17T00:00:00');
+        const lastWeek = new Date(UTILS.getTodayStr() + 'T00:00:00');
         lastWeek.setDate(lastWeek.getDate() - 7);
         filteredExpenses = state.expenses.filter(e => new Date(e.date + 'T00:00:00') >= lastWeek);
       } else if (state.expenseFilter === 'monthly') {
-        const firstOfMonth = new Date('2026-06-01T00:00:00');
+        const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
         filteredExpenses = state.expenses.filter(e => new Date(e.date + 'T00:00:00') >= firstOfMonth);
       }
 
@@ -1209,8 +1189,8 @@
       } else if (state.lendingFilter === 'borrowed') {
         listData = state.lending.filter(l => l.type === 'borrowed');
       } else if (state.lendingFilter === 'overdue') {
-        // Redifine status logically if past June 17, 2026 and not Paid
-        const today = new Date('2026-06-17T00:00:00');
+        // Redifine status logically if past dynamic local today and not Paid
+        const today = new Date(UTILS.getTodayStr() + 'T00:00:00');
         listData = state.lending.filter(l => l.status !== 'Paid' && new Date(l.dueDate + 'T00:00:00') < today);
       }
  
@@ -1226,7 +1206,7 @@
           
           // Re-evaluate overdue dynamically
           const dDate = new Date(item.dueDate + 'T00:00:00');
-          const tDate = new Date('2026-06-17T00:00:00');
+          const tDate = new Date(UTILS.getTodayStr() + 'T00:00:00');
           let displayStatus = item.status;
           if (item.status !== 'Paid' && dDate < tDate) {
             displayStatus = 'Overdue';
@@ -1271,7 +1251,7 @@
     // 4. View: Task Manager Render
     function drawTasks() {
       // Calculate active task statistics
-      let todayStr = '2026-06-17';
+      let todayStr = UTILS.getTodayStr();
       let dueTodayTasks = state.tasks.filter(t => t.dueDate === todayStr);
       let completedTodayTasks = dueTodayTasks.filter(t => t.completed).length;
       let totalTodayTasks = dueTodayTasks.length;
@@ -1357,27 +1337,63 @@
       // Draw Habits Cards containing 7-day mini tracker calendar grids
       let habitStackHtml = '';
       
+      // Last 7 days definitions based on dynamic local date
+      const datesOfWeek_str = [];
+      const baseDate = new Date(UTILS.getTodayStr() + 'T00:00:00');
+      // Subtract up to 6 days
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(UTILS.getTodayStr() + 'T00:00:00');
+        d.setDate(baseDate.getDate() - i);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        datesOfWeek_str.push(`${yyyy}-${mm}-${dd}`);
+      }
+
+      // Render 7-day Dynamic Daily Compliance Grid!
+      const weekdaysShort = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+      let complianceHtml = '';
+      
+      datesOfWeek_str.forEach((dayStr) => {
+        const d = new Date(dayStr + 'T00:00:00');
+        const dayNum = d.getDate();
+        const dayName = weekdaysShort[d.getDay()];
+        const isToday = dayStr === UTILS.getTodayStr();
+        
+        // Check if the user completed ALL active habits on this day
+        let countCompleted = state.habits.filter(h => h.history[dayStr] === true).length;
+        let totalActiveCount = state.habits.length;
+        let completedAllFlag = totalActiveCount > 0 && countCompleted === totalActiveCount;
+        let completedSomeFlag = countCompleted > 0;
+        
+        let circleCls = 'bg-olive-dusty/10 hover:bg-coffee-bean/20';
+        let textCls = 'text-olive-dusty/60 font-bold';
+        
+        if (isToday) {
+          circleCls = 'bg-coffee-bean text-white ring-2 ring-coffee-bean/30 shadow-sm';
+          textCls = 'text-ebony font-semibold';
+        } else if (completedAllFlag) {
+          circleCls = 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20';
+        } else if (completedSomeFlag) {
+          circleCls = 'bg-coffee-bean/10 text-coffee-bean';
+        }
+        
+        complianceHtml += `
+          <div>
+            <span class="${isToday ? 'text-ebony font-semibold' : 'text-olive-dusty/60 font-bold'} block mb-1">${dayName}</span>
+            <span data-day="${dayStr}" class="day-dot w-7 h-7 mx-auto rounded-full ${circleCls} flex items-center justify-center font-bold">${dayNum}</span>
+          </div>`;
+      });
+      $('#compliance-grid').html(complianceHtml);
+
       if (state.habits.length === 0) {
         habitStackHtml = `
           <div class="text-center py-10 text-xs text-olive-dusty/50 glass-card rounded-2xl border border-dashed border-white/50">
             <i class="fa-solid fa-seedling text-2xl mb-2 block text-olive-dusty/40"></i> No habits registered! Start fresh
           </div>`;
       } else {
-        // Last 7 days definitions
-        const datesOfWeek_str = [];
-        const baseDate = new Date('2026-06-17T00:00:00');
-        // Subtract up to 6 days
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date('2026-06-17T00:00:00');
-          d.setDate(baseDate.getDate() - i);
-          const yyyy = d.getFullYear();
-          const mm = String(d.getMonth() + 1).padStart(2, '0');
-          const dd = String(d.getDate()).padStart(2, '0');
-          datesOfWeek_str.push(`${yyyy}-${mm}-${dd}`);
-        }
-
         state.habits.forEach(habit => {
-          let todayStr = '2026-06-17';
+          let todayStr = UTILS.getTodayStr();
           let doneToday = habit.history[todayStr] === true;
 
           // Create calendar indicator circles for last 7 days
@@ -1440,7 +1456,7 @@
         amount: parseFloat(amount),
         category: category,
         description: description || category,
-        date: date || '2026-06-17'
+        date: date || UTILS.getTodayStr()
       };
 
       items.push(newItem);
@@ -1475,7 +1491,7 @@
           loan.amount,
           'Others',
           `Settle: ${loan.person}`,
-          '2026-06-17'
+          UTILS.getTodayStr()
         );
 
         addNotificationText(`Settlement registered with ${loan.person}.`, 'success');
@@ -1540,7 +1556,7 @@
         type: type,
         person: person,
         amount: parseFloat(amount),
-        dueDate: date || '2026-06-18',
+        dueDate: date || UTILS.getTodayStr(),
         status: 'Pending',
         payments: []
       });
@@ -1562,7 +1578,7 @@
         id: Date.now(),
         title: title,
         priority: priority,
-        dueDate: date || '2026-06-17',
+        dueDate: date || UTILS.getTodayStr(),
         completed: false
       });
       DB.set('tasks', items);
@@ -1629,7 +1645,7 @@
       let idx = habits.findIndex(h => h.id == habitId);
       if (idx !== -1) {
         let h = habits[idx];
-        let today = '2026-06-17';
+        let today = UTILS.getTodayStr();
         h.history[today] = true;
         h.streak += 1;
         
@@ -1688,6 +1704,11 @@
     // -------------------------------------------------------------
     function openFormSheet(formType) {
       let formHtml = '';
+      const todayStr = UTILS.getTodayStr();
+      const futureDate = new Date(todayStr + 'T00:00:00');
+      futureDate.setDate(futureDate.getDate() + 8);
+      const futureStr = `${futureDate.getFullYear()}-${String(futureDate.getMonth() + 1).padStart(2, '0')}-${String(futureDate.getDate()).padStart(2, '0')}`;
+
       if (formType === 'expense') {
         formHtml = `
           <h3 class="text-sm font-extrabold text-ebony-dark mb-4 flex items-center bg-white/20 p-1 rounded-xl"><i class="fa-solid fa-receipt text-coffee-bean mr-1.5"></i> Log New Transaction</h3>
@@ -1727,7 +1748,7 @@
 
             <div>
               <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Posting Date</span>
-              <input type="date" id="f-date" value="2026-06-17" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
+              <input type="date" id="f-date" value="${todayStr}" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
             </div>
 
             <button type="button" onclick="submitExpenseForm()" class="w-full mt-2 py-3 bg-gradient-to-r from-coffee-bean to-camel text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-button active:scale-95 transition-all">Publish Transaction</button>
@@ -1758,7 +1779,7 @@
 
             <div>
               <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Final Due Date limit</span>
-              <input type="date" id="f-lending-date" value="2026-06-25" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
+              <input type="date" id="f-lending-date" value="${futureStr}" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
             </div>
 
             <button type="button" onclick="submitLendingForm()" class="w-full mt-2 py-3 bg-gradient-to-r from-coffee-bean to-camel text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-button active:scale-95 transition-all">Submit Entry</button>
@@ -1784,7 +1805,7 @@
 
             <div>
               <span class="text-[10px] font-mono uppercase text-olive-dusty/60 font-semibold mb-1 block">Settled Due-Date</span>
-              <input type="date" id="f-task-date" value="2026-06-17" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
+              <input type="date" id="f-task-date" value="${todayStr}" class="w-full p-3 rounded-xl border border-olive-dusty/15 bg-white outline-none focus:border-coffee-bean font-mono">
             </div>
 
             <button type="button" onclick="submitTaskForm()" class="w-full mt-2 py-3 bg-[#414833] text-white rounded-xl font-bold text-xs uppercase tracking-wider active:scale-95 transition-all">Create New Task</button>
@@ -1915,13 +1936,17 @@
 
       // 3. Header dynamic greet greeting
       const hrs = new Date().getHours();
-      let greetingMsg = "Good Morning, Chief";
-      if (hrs >= 17) greetingMsg = "Good Evening, Partner";
-      else if (hrs >= 12) greetingMsg = "Good Afternoon, Patron";
+      let greetingMsg = "Good Morning, Huzaifa";
+      if (hrs >= 17) greetingMsg = "Good Evening, Huzaifa";
+      else if (hrs >= 12) greetingMsg = "Good Afternoon, Huzaifa";
       $('#greeting-title').text(greetingMsg);
 
-      // Update date format based on system date June 17, 2026
-      $('#live-date').text('Wed, Jun 17 2026');
+      // Update date format based on dynamic system local date
+      const todayDate = new Date();
+      const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      let formattedLiveDate = `${weekdays[todayDate.getDay()]}, ${months[todayDate.getMonth()]} ${todayDate.getDate()} ${todayDate.getFullYear()}`;
+      $('#live-date').text(formattedLiveDate);
 
       // Setup Notification Trigger Bell
       $('#notification-btn').on('click', toggleNotificationSidebar);
