@@ -644,8 +644,13 @@
   <div id="modal-container" class="fixed inset-0 bg-black/45 backdrop-blur-sm z-50 transition-opacity duration-300 flex justify-center items-end opacity-0 pointer-events-none">
     <div id="bottom-sheet" class="w-full max-w-[430px] bg-gradient-to-b from-[#fdfcf9] to-[#f4ebe0] border-t border-white/50 rounded-t-[34px] p-5 shadow-2 targets-scroll-control transform translate-y-full transition-transform duration-300 max-h-[85vh] overflow-y-auto no-scrollbar">
       
-      <!-- Action indicator line bar -->
-      <div class="w-10 h-1.5 bg-ebony/10 rounded-full mx-auto mb-4 cursor-pointer" onclick="closeFormSheet()"></div>
+      <!-- Action indicator line bar & close button -->
+      <div class="flex justify-between items-center mb-3">
+        <div class="w-10 h-1.5 bg-ebony/15 rounded-full cursor-pointer" onclick="closeFormSheet()"></div>
+        <button onclick="closeFormSheet()" class="w-7 h-7 rounded-xl hover:bg-black/5 text-ebony text-xs transition-all flex items-center justify-center cursor-pointer shrink-0">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
       
       <div id="modal-form-content">
         <!-- Forms rendered dynamically -->
@@ -676,7 +681,7 @@
 
   <!-- Detailed Shop Ledger Modal Layer -->
   <div id="shop-detail-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-[60] flex justify-center items-end sm:items-center opacity-0 pointer-events-none transition-opacity duration-300 p-0 sm:p-4">
-    <div id="sd-modal-box" class="w-full max-w-[440px] bg-[#fdfbf7] border border-white/60 rounded-t-[32px] sm:rounded-[32px] p-5 shadow-2xl max-h-[90vh] flex flex-col transform translate-y-full sm:translate-y-0 transition-transform duration-300">
+    <div id="sd-modal-box" class="w-full max-w-[440px] bg-[#fdfbf7] border border-white/60 rounded-t-[32px] sm:rounded-[32px] p-5 shadow-2xl max-h-[90vh] flex flex-col transform translate-y-full transition-transform duration-300">
       <div class="flex justify-between items-start pb-3 border-b border-olive-dusty/10">
         <div class="flex items-center space-x-2.5">
           <div class="w-9 h-9 rounded-xl bg-coffee-bean/10 text-coffee-bean flex items-center justify-center text-sm shrink-0">
@@ -1914,7 +1919,7 @@
     function closeShopDetailModal() {
       $('#sd-modal-box').removeClass('translate-y-0').addClass('translate-y-full');
       setTimeout(() => {
-        $('#shop-detail-modal').addClass('opacity-0 pointer-events-none');
+        $('#shop-detail-modal').removeClass('opacity-100').addClass('opacity-0 pointer-events-none');
       }, 150);
     }
 
@@ -2852,7 +2857,7 @@
       }
 
       // Slide up bottom sheet smoothly
-      $('#modal-container').removeClass('opacity-0 pointer-events-none');
+      $('#modal-container').removeClass('opacity-0 pointer-events-none').addClass('opacity-100');
       $('#bottom-sheet').removeClass('translate-y-full').addClass('translate-y-0');
     }
 
@@ -2879,9 +2884,9 @@
     }
 
     function closeFormSheet() {
-      $('#bottom-sheet').addClass('translate-y-full').removeClass('translate-y-0');
+      $('#bottom-sheet').removeClass('translate-y-0').addClass('translate-y-full');
       setTimeout(() => {
-        $('#modal-container').addClass('opacity-0 pointer-events-none');
+        $('#modal-container').removeClass('opacity-100').addClass('opacity-0 pointer-events-none');
       }, 150);
     }
 
@@ -3087,8 +3092,19 @@
       });
 
       // Close sheets on escape key or outer container backdrop click
-      $('#modal-container').on('mousedown', function(e) {
+      $('#modal-container').on('mousedown click', function(e) {
         if (e.target === this) closeFormSheet();
+      });
+
+      $('#shop-detail-modal').on('mousedown click', function(e) {
+        if (e.target === this) closeShopDetailModal();
+      });
+
+      $(document).on('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeFormSheet();
+          closeShopDetailModal();
+        }
       });
 
       // 4. Invoke initial loading sequence
